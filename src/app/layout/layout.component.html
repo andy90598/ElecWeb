@@ -1,0 +1,42 @@
+
+<!-- 頁首 -->
+<div class="navbar navbar-dark bg-primary">
+  <a class="navbar-brand" href="">
+    <img src="../../assets/imgs/li.png" style="margin-right: 10px; margin-top: 0px; height: 28px;">
+    電力系統
+  </a>
+</div>
+<!-- 頁首END -->
+<!-- 頁首以下 -->
+<div class="container-fluid">
+  <div class="row">
+    <!-- 左側navbar -->
+    <div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark col-md-1">
+      <a (click)="Goto('dashboard')" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+        <span class="fs-4" style="font-size: 1.5rem!important">
+          目錄
+        </span>
+      </a>
+      <hr>
+      <ul class="nav nav-pills flex-column mb-auto">
+        <li class="nav-item">
+          <a (click)="Goto('dashboard')" [ngClass]="{'active':path=='dashboard'}" class="nav-link text-white">
+            面板
+          </a>
+        </li>
+        <li class="nav-item">
+          <a  (click)="Goto('chart')" [ngClass]="{'active':path=='chart'}" class="nav-link text-white">
+            圖表
+          </a>
+        </li>
+      </ul>
+    </div>
+    <!-- 左側navbar END -->
+    <!-- 右側主內容物 -->
+    <div class="col-md-11">
+      <router-outlet></router-outlet>
+    </div>
+    <!-- 右側主內容物 -->
+  </div>
+</div>
+<!-- 頁首以下END -->
