@@ -11,8 +11,8 @@
 <div class="container-fluid">
   <div class="row">
     <!-- 左側navbar -->
-    <div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark col-md-1 col-sm-2">
-      <a (click)="Goto('dashboard')" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+    <div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark col-sm-2 col-lg-1 ">
+      <a href="" (click)="Goto('dashboard')" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
         <span class="fs-4" style="font-size: 1.5rem!important">
           目錄
         </span>
@@ -20,12 +20,12 @@
       <hr>
       <ul class="nav nav-pills flex-column mb-auto ">
         <li class="nav-item">
-          <a (click)="Goto('dashboard')" [ngClass]="{'active':path=='dashboard'}" class="nav-link text-white">
+          <a href="javascript:void(0);" (click)="Goto('dashboard')" [ngClass]="{'active':path=='dashboard'}" class="nav-link text-white">
             面板
           </a>
         </li>
         <li class="nav-item">
-          <a  (click)="Goto('chart')" [ngClass]="{'active':path=='chart'}" class="nav-link text-white">
+          <a href="javascript:void(0);" (click)="Goto('chart')" [ngClass]="{'active':path=='chart'}" class="nav-link text-white">
             圖表
           </a>
         </li>
@@ -33,7 +33,7 @@
     </div>
     <!-- 左側navbar END -->
     <!-- 右側主內容物 -->
-    <div class="col-sm-9 col-sm-offset-2 col-md-11 col-md-offset-1 main" style="padding: 10px 40px 0px 40px;">
+    <div class="col-sm-9 col-sm-offset-2 col-lg-11 col-lg-offset-1 main" style="padding: 10px 40px 0px 40px;">
       <router-outlet></router-outlet>
     </div>
     <!-- 右側主內容物 -->
