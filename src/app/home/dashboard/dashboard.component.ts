@@ -1,4 +1,3 @@
-import { deviceenums } from './../../Models/Enums';
 import { PieChart } from './../../Models/PieChart';
 import { PieDataService } from './../../services/pie-data.service';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
@@ -7,6 +6,9 @@ import { ElecRowData } from 'src/app/Models/ElecRowData';
 import { HttpService } from 'src/app/services/http.service';
 import { StringOption } from 'src/app/Models/Options';
 import * as D3 from 'd3';
+import { Chart } from 'angular-highcharts';
+import { style } from 'd3';
+
 
 @Component({
   selector: 'app-dashboard',
@@ -24,6 +26,54 @@ export class DashboardComponent implements OnInit {
   //控制 setInterval()生命週期
   id:any
 
+  chart=new Chart({
+    chart:{
+      spacing : [0, 0 , 0, 0], //margin 上左下右
+    },
+    title:{
+      text:"測試",
+      style:{
+        fontSize:'2em'
+      }
+    },
+    //商標
+    credits:{
+      enabled:false
+    },
+    //滑鼠移上去時顯示的文字方塊
+    tooltip:{
+      pointFormat:'{series.name}: <b>{point.percentage:.1f}%</b>'
+    },
+    // 针对不同类型图表的配置
+    plotOptions: {
+      pie: {
+        showInLegend: true,
+        allowPointSelect: true, //可被選取
+        cursor: 'pointer', //指標變滑鼠
+        dataLabels: {
+          enabled: true,
+          distance:'-10%',
+          // format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+          format: '{point.percentage:.1f} %',
+          style: {
+            color: 'black',
+            fontSize:'18px'
+          }
+        },
+      },
+    },
+    // 数据列，图表上一个或多个数据系列
+    series:[{
+      size: '60%',
+      name: '比例',
+      innerSize:'60%',
+      type:"pie",
+      data: [
+        ['冷氣',40],
+        ['機台',60],
+      ]
+    }]
+  })
 
 
   deviceName=new Map([
@@ -43,7 +93,6 @@ export class DashboardComponent implements OnInit {
     this.id=setInterval(()=>{
       this.GetInit();
     },10000)
-
   }
   GetInit(){
     this. GetRowData();
