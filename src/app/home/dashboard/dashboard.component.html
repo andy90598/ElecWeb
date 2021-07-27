@@ -3,166 +3,48 @@
     <hr>
     <div class="row placeholders text-center mb-3" style="margin-right: 0px; margin-left: 0px; margin-top: 0px;">
 
-      <div class="col-xs-6 col-sm-3 placeholder">
+      <ng-container *ngFor="let item of elecDataList;let i =index">
+        <div class="col-xs-6 col-sm-3 placeholder">
+          <radial-gauge
+            [value]="elecDataList[1].value*10"
+            title="Watt"
+            units="Kw"
+            width="200"
+            height="200"
 
-        <radial-gauge
-          [value]="elecDataList[1].value*10"
-          title="Watt"
-          units="Kw"
-          width="200"
-          height="200"
+            min-value="40"
+            max-value="60"
+            major-ticks="40,45,50,55,60"
+            minor-ticks="2"
 
-          min-value="40"
-          max-value="60"
-          major-ticks="40,45,50,55,60"
-          minor-ticks="2"
+            needle-type="arrow"
+            needle-width="2"
+            needle-colors="blue"
+            needle-circle-inner="false"
+            needle-circle-size="7"
+            needle-circle-outer="true"
 
-          needle-type="arrow"
-          needle-width="2"
-          needle-colors="blue"
-          needle-circle-inner="false"
-          needle-circle-size="7"
-          needle-circle-outer="true"
+            color-needle="red"
+            color-needle-end="blue"
+            color-needle-shadow-down="#550"
+            color-needle-circle-outer="#333"
+            color-needle-circle-outer-end="#111"
 
-          color-needle="red"
-          color-needle-end="blue"
-          color-needle-shadow-down="#550"
-          color-needle-circle-outer="#333"
-          color-needle-circle-outer-end="#111"
-
-          animation-duration="900"
-          animation-rule="linear"
-          glow="true"
-          highlights='[{"from": 40, "to": 45, "color": "#eee"},
-                      {"from": 45, "to": 50, "color": "#ccc"},
-                      {"from": 50, "to": 55, "color": "#aaa"},
-                      {"from": 55, "to": 60, "color": "#eaa"}]'
-        ></radial-gauge>
-        <h4>
-          冷氣功率<br>
-          {{elecDataList[1].value*10}}千瓦
-        </h4>
-      </div>
-
-      <div class="col-xs-6 col-sm-3 placeholder">
-        <radial-gauge
-          [value]="elecDataList[0].value*10"
-          title="Watt"
-          units="Kw"
-          width="200"
-          height="200"
-
-          min-value="40"
-          max-value="60"
-          major-ticks="40,45,50,55,60"
-          minor-ticks="2"
-
-          needle-type="arrow"
-          needle-width="2"
-          needle-colors="blue"
-          needle-circle-inner="false"
-          needle-circle-size="7"
-          needle-circle-outer="true"
-
-          color-needle="red"
-          color-needle-end="blue"
-          color-needle-shadow-down="#550"
-          color-needle-circle-outer="#333"
-          color-needle-circle-outer-end="#111"
-
-          animation-duration="900"
-          animation-rule="linear"
-          glow="true"
-          highlights='[{"from": 40, "to": 45, "color": "#eee"},
-                      {"from": 45, "to": 50, "color": "#ccc"},
-                      {"from": 50, "to": 55, "color": "#aaa"},
-                      {"from": 55, "to": 60, "color": "#eaa"}]'
-        ></radial-gauge>
-        <h4>
-          機台功率<br>
-          {{elecDataList[0].value*10}}千瓦
-        </h4>
-      </div>
-
-      <div class="col-xs-6 col-sm-3 placeholder">
-        <radial-gauge
-          [value]="elecDataList[1].value*10"
-          title="Watt"
-          units="Kw"
-          width="200"
-          height="200"
-
-          min-value="40"
-          max-value="60"
-          major-ticks="40,45,50,55,60"
-          minor-ticks="2"
-
-          needle-type="arrow"
-          needle-width="2"
-          needle-colors="blue"
-          needle-circle-inner="false"
-          needle-circle-size="7"
-          needle-circle-outer="true"
-
-          color-needle="red"
-          color-needle-end="blue"
-          color-needle-shadow-down="#550"
-          color-needle-circle-outer="#333"
-          color-needle-circle-outer-end="#111"
-
-          animation-duration="900"
-          animation-rule="linear"
-          glow="true"
-          highlights='[{"from": 40, "to": 45, "color": "#eee"},
-                      {"from": 45, "to": 50, "color": "#ccc"},
-                      {"from": 50, "to": 55, "color": "#aaa"},
-                      {"from": 55, "to": 60, "color": "#eaa"}]'
-        ></radial-gauge>
-        <h4>
-          燈光功率<br>
-          {{elecDataList[1].value*10}}千瓦
-        </h4>
-      </div>
-
-      <div class="col-xs-6 col-sm-3 placeholder">
-        <radial-gauge
-          [value]="elecDataList[2].value*10"
-          title="Watt"
-          units="Kw"
-          width="200"
-          height="200"
-
-          min-value="40"
-          max-value="60"
-          major-ticks="40,45,50,55,60"
-          minor-ticks="2"
-
-          needle-type="arrow"
-          needle-width="2"
-          needle-colors="blue"
-          needle-circle-inner="false"
-          needle-circle-size="7"
-          needle-circle-outer="true"
-
-          color-needle="red"
-          color-needle-end="blue"
-          color-needle-shadow-down="#550"
-          color-needle-circle-outer="#333"
-          color-needle-circle-outer-end="#111"
-
-          animation-duration="900"
-          animation-rule="linear"
-          glow="true"
-          highlights='[{"from": 40, "to": 45, "color": "#eee"},
-                      {"from": 45, "to": 50, "color": "#ccc"},
-                      {"from": 50, "to": 55, "color": "#aaa"},
-                      {"from": 55, "to": 60, "color": "#eaa"}]'
-        ></radial-gauge>
-        <h4>
-          XX功率<br>
-          {{elecDataList[2].value*10 |number}}千瓦
-        </h4>
-      </div>
+            animation-duration="900"
+            animation-rule="linear"
+            glow="true"
+            highlights='[{"from": 40, "to": 45, "color": "#eee"},
+                        {"from": 45, "to": 50, "color": "#ccc"},
+                        {"from": 50, "to": 55, "color": "#aaa"},
+                        {"from": 55, "to": 60, "color": "#eaa"}]'
+          ></radial-gauge>
+          <h4>
+            {{elecDataList[i].uuid}}<br>
+            {{deviceNameList[i]}}<br>
+            {{elecDataList[i].value*10 |number}}千瓦
+          </h4>
+        </div>
+      </ng-container>
 
     </div>
     <h2>
@@ -170,11 +52,6 @@
     </h2>
     <hr>
     <div class="row">
-      <div class="col-lg-3 col-md-3">
-        <h4 class="text-center">空調與機台用電占比</h4>
-        <div #Ac_Server>
-        </div>
-      </div>
       <div class="col-lg-3 col-md-3">
         <div [chart]="chart"></div>
       </div>

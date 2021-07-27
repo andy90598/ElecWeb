@@ -1,13 +1,14 @@
-import { PieChart } from './../../Models/PieChart';
-import { PieDataService } from './../../services/pie-data.service';
+import { Chart } from 'angular-highcharts';
+import { DonutChart } from './../../Models/DonutChart';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ElecData } from 'src/app/Models/ElecData';
 import { ElecRowData } from 'src/app/Models/ElecRowData';
 import { HttpService } from 'src/app/services/http.service';
-import { StringOption } from 'src/app/Models/Options';
-import * as D3 from 'd3';
-import { Chart } from 'angular-highcharts';
-import { style } from 'd3';
+import { Options } from 'highcharts';
+
+
+
+
 
 
 @Component({
@@ -21,71 +22,15 @@ export class DashboardComponent implements OnInit {
   elecRowDataList:Array<ElecRowData>=[];
   //從192.168.140.80:9210撈到的資料
   elecDataList:Array<ElecData>=[];
-  //圓餅圖表
-  pie: PieChart = new PieChart;
   //控制 setInterval()生命週期
   id:any
+  //設備名稱表
+  deviceNameList=["壞掉","機台","冷氣"]
+  chart=new Chart()
 
-  chart=new Chart({
-    chart:{
-      spacing : [0, 0 , 0, 0], //margin 上左下右
-    },
-    title:{
-      text:"測試",
-      style:{
-        fontSize:'2em'
-      }
-    },
-    //商標
-    credits:{
-      enabled:false
-    },
-    //滑鼠移上去時顯示的文字方塊
-    tooltip:{
-      pointFormat:'{series.name}: <b>{point.percentage:.1f}%</b>'
-    },
-    // 针对不同类型图表的配置
-    plotOptions: {
-      pie: {
-        showInLegend: true,
-        allowPointSelect: true, //可被選取
-        cursor: 'pointer', //指標變滑鼠
-        dataLabels: {
-          enabled: true,
-          distance:'-10%',
-          // format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-          format: '{point.percentage:.1f} %',
-          style: {
-            color: 'black',
-            fontSize:'18px'
-          }
-        },
-      },
-    },
-    // 数据列，图表上一个或多个数据系列
-    series:[{
-      size: '60%',
-      name: '比例',
-      innerSize:'60%',
-      type:"pie",
-      data: [
-        ['冷氣',40],
-        ['機台',60],
-      ]
-    }]
-  })
-
-
-  deviceName=new Map([
-    [1,"空調"],
-    [2,"機台"],
-  ]);
-
-  elecDeviceList:StringOption[]=[]
 
   constructor(
     private httpService:HttpService,
-    private pieDataService:PieDataService
   ) { }
 
   ngOnInit(): void {
@@ -102,30 +47,27 @@ export class DashboardComponent implements OnInit {
   GetRowData(){
     this.httpService.get("http://192.168.140.80:9100/list").subscribe(x=>{
       this.elecRowDataList=x
-      // console.log('this.elecRowDataList',this.elecRowDataList)
+      console.log('this.elecRowDataList',this.elecRowDataList)
     })
   }
   GetData(){
-    let sum=0
-    this.elecDeviceList = []
+    let options = new DonutChart();
+    let elecDeviceList=new Array();
     this.httpService.get("http://192.168.140.80:9210/list").subscribe(x=>{
-      this.elecDataList=x
-
-      ///以下做PIE CHART用到的資料
+      this.elecDataList=x;
       this.elecDataList.forEach(x=>{
-        sum+=x.value
+        const elecDevice = new Array<string|number>();
+        elecDevice[0]=x.uuid;
+        elecDevice[1]=x.value;
+        console.log(elecDevice)
+        elecDeviceList.push(elecDevice)
       })
-      sum+=1
-      console.log(sum)
-      this.elecDataList.forEach((x,index)=>{
-        const elecDevice = new StringOption
-        elecDevice.label=this.deviceName.get(index) as string
-        elecDevice.value=Math.round((x.value/sum*100)*100)/100
-        this.elecDeviceList.push(elecDevice)
-      })
-      // console.log('this.elecDeviceList',this.elecDeviceList)
-      this.elecDeviceList=this.elecDeviceList.slice(1)
-      this.pieDataService.setData(this.elecDeviceList)
+      elecDeviceList = elecDeviceList.slice(1)
+      console.log(elecDeviceList)
+      Array.prototype.push.apply(options.options.series[0].data,elecDeviceList)
+
+      this.chart=new Chart(options.options as Options)
+      console.log(this.chart)
     })
 
   }
@@ -135,67 +77,5 @@ export class DashboardComponent implements OnInit {
       clearInterval(this.id);
     }
   }
-
-  ngAfterViewInit(){
-    this.pie.htmlElement = this.element.nativeElement;
-    this.pie.host = D3.select(this.pie.htmlElement);
-    this.pieDataService.$data.subscribe(data=>{
-      this.pie.pieData = data;
-      this.setup();
-      this.bulidSVG();
-      this.buildPie();
-    })
-  }
-
-  private setup():void{
-    //設半徑 長寬
-    this.pie.width = 200;
-    this.pie.height = 200;
-    this.pie.radius = Math.min(this.pie.width,this.pie.height)/4;
-  }
-  private bulidSVG():void{
-    //設定大小及定位
-    this.pie.host.html("");
-    this.pie.svg = this.pie.host.append("svg")
-      .attr("viewBox",`0 0 ${this.pie.width} ${this.pie.height}`)
-      .append("g")
-      .attr("transform",`translate(${this.pie.width/2},${this.pie.height/2})`);
-  }
-  private buildPie():void{
-    let newpie = D3.pie(); //create pie
-    let values = this.pie.pieData.map(data=>data.value);
-    let arcSelection = this.pie.svg.selectAll(".arc")
-      .data(newpie(values))
-      .enter()
-      .append("g")
-      .attr("class","arc");
-    this.populatePie(arcSelection)
-  }
-
-  private populatePie(arcSelection:any):void{
-    let innerRadius = this.pie.radius-20;
-    let outterRadius = this.pie.radius;
-    let pieColor = D3.scaleOrdinal(D3.schemeCategory10);
-    let arc = D3.arc().innerRadius(innerRadius).outerRadius(outterRadius);
-    //Draw arc paths
-
-    arcSelection.append("path")
-      .attr("d",arc)
-      .attr("fill",(datum: any,index:number)=>{
-        return pieColor(this.pie.pieData[index].label)
-      })
-      .text((datum:any,index:number)=>this.pie.pieData[index].label)
-      .style("text-anchor","middle");
-
-    arcSelection.append("text")
-      .attr("transform",(datum:any)=>{
-        datum.innerRadius = 0;
-        datum.outerRadius = this.pie.radius;
-        return "translate(" + arc.centroid(datum) +")";
-      })
-      .text((datum:any,index:number)=>this.pie.pieData[index].value+'%')
-      .style("text-anchor","middle");
-  }
-
 
 }
