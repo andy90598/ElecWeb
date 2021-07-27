@@ -25,6 +25,7 @@ export class DashboardComponent implements OnInit {
   id:any
 
 
+
   deviceName=new Map([
     [1,"空調"],
     [2,"機台"],
@@ -60,6 +61,8 @@ export class DashboardComponent implements OnInit {
     this.elecDeviceList = []
     this.httpService.get("http://192.168.140.80:9210/list").subscribe(x=>{
       this.elecDataList=x
+
+      ///以下做PIE CHART用到的資料
       this.elecDataList.forEach(x=>{
         sum+=x.value
       })
@@ -99,7 +102,7 @@ export class DashboardComponent implements OnInit {
     //設半徑 長寬
     this.pie.width = 200;
     this.pie.height = 200;
-    this.pie.radius = Math.min(this.pie.width,this.pie.height)/2;
+    this.pie.radius = Math.min(this.pie.width,this.pie.height)/4;
   }
   private bulidSVG():void{
     //設定大小及定位
@@ -121,8 +124,8 @@ export class DashboardComponent implements OnInit {
   }
 
   private populatePie(arcSelection:any):void{
-    let innerRadius = this.pie.radius-55;
-    let outterRadius = this.pie.radius-10;
+    let innerRadius = this.pie.radius-20;
+    let outterRadius = this.pie.radius;
     let pieColor = D3.scaleOrdinal(D3.schemeCategory10);
     let arc = D3.arc().innerRadius(innerRadius).outerRadius(outterRadius);
     //Draw arc paths
