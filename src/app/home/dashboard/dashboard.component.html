@@ -4,17 +4,17 @@
     <div class="row placeholders text-center mb-3" style="margin-right: 0px; margin-left: 0px; margin-top: 0px;">
 
       <ng-container *ngFor="let item of elecDataList;let i =index">
-        <div class="col-xs-6 col-sm-3 placeholder">
+        <div class="col-xs-6 col-sm-4 placeholder">
           <radial-gauge
-            [value]="elecDataList[1].value*10"
+            [attr.value]="item.value*110/1000"
             title="Watt"
             units="Kw"
             width="200"
             height="200"
 
-            min-value="40"
-            max-value="60"
-            major-ticks="40,45,50,55,60"
+            min-value="0.1"
+            max-value="0.9"
+            major-ticks="0.1,0.3,0.5,0.7,0.9"
             minor-ticks="2"
 
             needle-type="arrow"
@@ -33,15 +33,16 @@
             animation-duration="900"
             animation-rule="linear"
             glow="true"
-            highlights='[{"from": 40, "to": 45, "color": "#eee"},
-                        {"from": 45, "to": 50, "color": "#ccc"},
-                        {"from": 50, "to": 55, "color": "#aaa"},
-                        {"from": 55, "to": 60, "color": "#eaa"}]'
+            highlights='[{"from": 0.1, "to": 0.3, "color": "#eee"},
+                        {"from": 0.3, "to": 0.5, "color": "#ccc"},
+                        {"from": 0.5, "to": 0.7, "color": "#aaa"},
+                        {"from": 0.7, "to": 0.9, "color": "#eaa"}]'
           ></radial-gauge>
           <h4>
-            {{elecDataList[i].uuid}}<br>
-            {{deviceNameList[i]}}<br>
-            {{elecDataList[i].value*10 |number}}千瓦
+            {{item.uuid}}<br>
+            {{deviceNameList[i]}}功率<br>
+            {{item.value*110/1000 |number}}千瓦<br>
+            電流: {{item.value}}A
           </h4>
         </div>
       </ng-container>
@@ -52,7 +53,7 @@
     </h2>
     <hr>
     <div class="row">
-      <div class="col-lg-3 col-md-3">
+      <div class="col-lg-3 col-md-4">
         <div [chart]="chart"></div>
       </div>
     </div>

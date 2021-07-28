@@ -33,7 +33,7 @@ export class DonutChart{
         cursor: 'pointer', //指標變滑鼠
         dataLabels: {
           enabled: true,
-          distance:'-10%',
+          distance:'-30%',
           // format: '<b>{point.name}</b>: {point.percentage:.1f} %',
           format: '{point.percentage:.1f} %',
           style: {

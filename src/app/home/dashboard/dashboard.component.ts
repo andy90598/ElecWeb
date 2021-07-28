@@ -55,9 +55,9 @@ export class DashboardComponent implements OnInit {
     let elecDeviceList=new Array();
     this.httpService.get("http://192.168.140.80:9210/list").subscribe(x=>{
       this.elecDataList=x;
-      this.elecDataList.forEach(x=>{
+      this.elecDataList.forEach((x,index)=>{
         const elecDevice = new Array<string|number>();
-        elecDevice[0]=x.uuid;
+        elecDevice[0]=this.deviceNameList[index];
         elecDevice[1]=x.value;
         console.log(elecDevice)
         elecDeviceList.push(elecDevice)
