@@ -6,9 +6,7 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class PieDataService {
-  public mockData : StringOption[]=[
-
-  ];
+  public mockData : StringOption[]=[];
   private dataSubject = new BehaviorSubject<StringOption[]>(this.mockData);
 
   $data = this.dataSubject.asObservable();
