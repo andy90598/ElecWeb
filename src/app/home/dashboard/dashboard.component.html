@@ -2,7 +2,6 @@
     <h1>用電資訊</h1>
     <hr>
     <div class="row placeholders text-center mb-3" style="margin-right: 0px; margin-left: 0px; margin-top: 0px;">
-
       <ng-container *ngFor="let item of elecDataList ;let i =index">
         <div class="col-xs-6 col-sm-4 placeholder">
           <radial-gauge
@@ -41,7 +40,6 @@
           <h4>
             {{item.uuid}}<br>
             {{deviceNameList[i]}}功率<br>
-            {{item.value*110/1000 |number}}千瓦<br>
             電流: {{item.value}}A
           </h4>
         </div>
@@ -54,8 +52,13 @@
     <hr>
     <div class="row">
       <div class="col-lg-3 col-md-4">
-        <div [chart]="chart"></div>
+        <div [chart]="donutchart"></div>
       </div>
+      <div class="col-lg-9 col-md-8">
+        <div [chart]="splinechart"></div>
+      </div>
+
+
     </div>
 
 </div>

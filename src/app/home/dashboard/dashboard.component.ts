@@ -1,3 +1,4 @@
+import { AccumulationElec } from './../../Models/AccumulationElec';
 import { SignalRService } from './../../services/signal-r.service';
 import { Chart } from 'angular-highcharts';
 import { DonutChart } from './../../Models/DonutChart';
@@ -6,6 +7,8 @@ import { ElecData } from 'src/app/Models/ElecData';
 import { ElecRowData } from 'src/app/Models/ElecRowData';
 import { HttpService } from 'src/app/services/http.service';
 import { Options } from 'highcharts';
+import { SplineChart } from 'src/app/Models/SplineChart';
+
 
 @Component({
   selector: 'app-dashboard',
@@ -23,7 +26,9 @@ export class DashboardComponent implements OnInit {
   id:any
   //設備名稱表
   deviceNameList=["壞掉","機台","冷氣"]
-  chart=new Chart()
+  donutchart=new Chart();
+  splinechart = new Chart();
+
 
   constructor(
     private httpService:HttpService,
@@ -54,8 +59,22 @@ export class DashboardComponent implements OnInit {
       // 陣列合併 把 elecDeviceList 第一筆去掉後塞到 options.options.series[0].data 裡
       Array.prototype.push.apply(options.options.series[0].data,elecDeviceList.slice(1))
       // 設this.chart的options 要把從donutChart這個class的型別轉換成 highcharts 的 Options
-      this.chart=new Chart(options.options as Options)
-      console.log(this.chart)
+      this.donutchart=new Chart(options.options as Options)
+    })
+    this.signalRService.$dataBar.subscribe(x=>{
+      let options2=new SplineChart();
+      const accumulationElecList=new Array;
+      let time=""
+      x.forEach(y=>{
+        accumulationElecList.push(Math.round(y.value*110))
+        time=y.time
+      })
+      options2.options.subtitle.text+=time
+      Array.prototype.push.apply(options2.options.series[0].data,accumulationElecList)
+      this.splinechart=new Chart(options2.options as Options)
+      console.log(this.splinechart)
+
+
     })
     this.id=setInterval(()=>{
       this.GetInit();

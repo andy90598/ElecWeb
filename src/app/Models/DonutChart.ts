@@ -4,7 +4,7 @@ export class DonutChart{
       spacing : [0, 0 , 0, 0], //margin 上左下右
     },
     title:{
-      text:"測試",
+      text:"用電比例",
       align:'center',
       y:25,
       style:{
