@@ -6,17 +6,19 @@ import { HomeRoutingModule } from './home-routing.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ChartComponent } from './chart/chart.component';
 import { ChartModule } from 'angular-highcharts';
+import { HighchartsChartModule } from 'highcharts-angular';
 
 @NgModule({
   declarations: [
     DashboardComponent,
-    ChartComponent
+    ChartComponent,
   ],
   imports: [
     CommonModule,
     HomeRoutingModule,
     GaugesModule,
     ChartModule,
+    HighchartsChartModule
   ],
   providers:[PieDataService],
   schemas:[CUSTOM_ELEMENTS_SCHEMA]

@@ -8,6 +8,7 @@ import { ElecRowData } from 'src/app/Models/ElecRowData';
 import { HttpService } from 'src/app/services/http.service';
 import { Options } from 'highcharts';
 import { SplineChart } from 'src/app/Models/SplineChart';
+import * as Highcharts from 'highcharts';
 
 
 @Component({
@@ -29,6 +30,74 @@ export class DashboardComponent implements OnInit {
   donutchart=new Chart();
   splinechart = new Chart();
 
+  highChart=Highcharts;
+  chartOptions = Highcharts.setOptions({
+    chart:{
+      spacing : [0, 0 , 0, 0], //margin 上左下右
+
+      events: {
+        load: function () {
+        var series = this.series[0],
+            chart = this;
+        // activeLastPointToolip(chart);
+          setInterval(function () {
+          // activeLastPointToolip(chart);
+        }, 1000);
+      }
+      }
+    },
+    title:{
+      text:"用電比例",
+      align:'center',
+      y:25,
+      style:{
+        fontSize:'2em'
+      }
+    },
+    //商標
+    credits:{
+      enabled:false
+    },
+    //滑鼠移上去時顯示的文字方塊
+    tooltip:{
+      pointFormat:'{series.name}: <b>{point.y:.1f}A</b>'
+    },
+    // 针对不同类型图表的配置
+    legend:{
+      align:'center',
+      verticalAlign:'top',
+      margin:0,
+      reversed:true
+    },
+    plotOptions: {
+      pie: {
+        showInLegend: true,
+        allowPointSelect: true, //可被選取
+        cursor: 'pointer', //指標變滑鼠
+        dataLabels: {
+          enabled: true,
+          distance:'-30%',
+          // format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+          format: '{point.percentage:.1f} %',
+          style: {
+            color: 'black',
+            fontSize:'18px'
+          }
+        },
+      },
+    },
+    // 数据列，图表上一个或多个数据系列
+    series:[{
+      size: '80%',
+      name: '比例',
+      innerSize:'60%',
+      type:"pie",
+      data: [
+        ["AAA",123],
+        ["BBB",456]
+      ]
+    }]
+  });
 
   constructor(
     private httpService:HttpService,
@@ -41,7 +110,9 @@ export class DashboardComponent implements OnInit {
     //signalR事件監聽器
     this.signalRService.addTransferBroadcastDataListener();
     this.GetInit();
+
     //訂閱 signalRService的 $data 當$data變動時收到資料
+
     this.signalRService.$data.subscribe(x=>{
       // 甜甜圈圖表樣板
       let options = new DonutChart();
@@ -61,6 +132,7 @@ export class DashboardComponent implements OnInit {
       // 設this.chart的options 要把從donutChart這個class的型別轉換成 highcharts 的 Options
       this.donutchart=new Chart(options.options as Options)
     })
+
     this.signalRService.$dataBar.subscribe(x=>{
       let options2=new SplineChart();
       const accumulationElecList=new Array;
@@ -72,13 +144,13 @@ export class DashboardComponent implements OnInit {
       options2.options.subtitle.text+=time
       Array.prototype.push.apply(options2.options.series[0].data,accumulationElecList)
       this.splinechart=new Chart(options2.options as Options)
-      console.log(this.splinechart)
-
-
+      // console.log(this.splinechart)
     })
+
     this.id=setInterval(()=>{
+      console.log('aaa')
       this.GetInit();
-    },10000)
+    },1000)
   }
 
   GetInit(){

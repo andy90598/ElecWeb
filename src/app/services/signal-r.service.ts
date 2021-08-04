@@ -46,13 +46,16 @@ export class SignalRService {
   public addTransferBroadcastDataListener =()=>{
     //訂閱 transferdata
     this.hubConnection.on('transferdata',(data)=>{
-      console.log(data)
+      // console.log(data)
       this.elecData=data;
       this.dataSubject.next(data);
     });
     this.hubConnection.on('transferdataBar',(barData)=>{
-      console.log(barData);
+      // console.log(barData);
       this.dataSubjectBar.next(barData);
     });
+    this.hubConnection.on('transferdataHour',(hourData)=>{
+      // console.log(hourData)
+    })
   }
 }

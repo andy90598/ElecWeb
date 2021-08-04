@@ -1,4 +1,3 @@
-
 export class SplineChart{
   public options={
     title: {
