@@ -51,10 +51,16 @@
     </h2>
     <hr>
     <div class="row">
-      <div class="col-lg-3 col-md-4">
 
-        <div [chart]="donutchart"></div>
-      </div>
+      <highcharts-chart
+          [Highcharts]="Highcharts"
+          [constructorType]="chartConstructor"
+          [options]="donutchart.options"
+          [(update)]="updateFlag"
+          [oneToOne]="true"
+          class="col-lg-3 col-md-4">
+      </highcharts-chart>
+        <!-- <div [chart]="donutchart"></div> -->
       <highcharts-chart
           [Highcharts]="Highcharts"
           [constructorType]="chartConstructor"

@@ -49,8 +49,7 @@ export class DonutChart{
       name: '比例',
       innerSize:'60%',
       type:"pie",
-      data: [
-      ]
+      data: new Array
     }]
-  }
+  } as any
 }

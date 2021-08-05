@@ -27,7 +27,8 @@ export class DashboardComponent implements OnInit {
   id:any
   //設備名稱表
   deviceNameList=["壞掉","機台","冷氣"]
-  donutchart=new Chart();
+  donutchart=new DonutChart;
+  barChart = new BarChart;
   updateFlag = false;
   Highcharts = Highcharts;
   chartConstructor = "chart";
@@ -76,7 +77,6 @@ export class DashboardComponent implements OnInit {
   //     }
   //   ]
   // } as any
-  barChart = new BarChart;
 
   constructor(
     private httpService:HttpService,
@@ -93,8 +93,6 @@ export class DashboardComponent implements OnInit {
     //訂閱 signalRService的 $data 當$data變動時收到資料
 
     this.signalRService.$data.subscribe(x=>{
-      // 甜甜圈圖表樣板
-      let options = new DonutChart();
       // 設備名稱跟值的表
       let elecDeviceList=new Array();
       // 讓elecDataList = 訂閱收到的值
@@ -107,9 +105,7 @@ export class DashboardComponent implements OnInit {
         elecDeviceList.push(elecDevice)
       })
       // 陣列合併 把 elecDeviceList 第一筆去掉後塞到 options.options.series[0].data 裡
-      Array.prototype.push.apply(options.options.series[0].data,elecDeviceList.slice(1))
-      // 設this.chart的options 要把從donutChart這個class的型別轉換成 highcharts 的 Options
-      this.donutchart=new Chart(options.options as Options)
+      this.donutchart.options.series[0].data=elecDeviceList.slice(1);
     })
 
     this.signalRService.$dataBar.subscribe(x=>{
