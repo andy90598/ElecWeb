@@ -6,15 +6,16 @@ import { Router } from '@angular/router';
   styleUrls: ['./layout.component.css']
 })
 export class LayoutComponent implements OnInit {
-  path='dashboard';
+  path='dashboard'
   constructor(
     private router:Router
   ) { }
 
   ngOnInit(): void {
+    this.path=this.router.url.split('/').pop() as any;
   }
   Goto(path:string){
+    this.router.navigate(['/home/'+path]);
     this.path=path
-    this.router.navigate(['/home/'+path])
   }
 }

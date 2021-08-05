@@ -109,6 +109,7 @@ export class DashboardComponent implements OnInit {
     })
 
     this.signalRService.$dataBar.subscribe(x=>{
+      console.log(x)
       const accumulationElecList =new Array
       let time=""
       x.forEach(y=>{

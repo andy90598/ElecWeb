@@ -1,3 +1,5 @@
+import { last } from 'rxjs/operators';
+import { SignalRService } from './../../services/signal-r.service';
 
 import { Component, OnInit } from '@angular/core';
 import * as Highcharts from 'highcharts';
@@ -13,86 +15,95 @@ import { Options } from 'highcharts';
 export class ChartComponent implements OnInit {
   highchart = Highcharts;
   timerId : any;
-  options:Options = {
+  options={
     chart: {
       type: 'spline',
       marginRight: 10,
-      events: {
-        load:  () =>{
-          var series = this.highchart.charts[this.highchart.charts.length-1]?.series[0]
-          this.timerId = setInterval(function () {
-            var x = (new Date()).getTime(), // 当前时间
-              y = Math.random();        // 随机值
-              console.log('im back');
-            series?.addPoint([x, y], true, true);
-          }, 5000);
-        }
-      }
     },
     title: {
-      text: '动态模拟实时数据'
+      text: '每小時用電量/千瓦'
+    },
+    plotOptions: {
+      spline: {
+        dataLabels: {
+            enabled: false
+        },
+      }
     },
     xAxis: {
+      title: {
+        text: '日期/時間'
+      },
       type: 'datetime',
-      tickPixelInterval: 150
+      tickInterval:3600 * 1000,
     },
     yAxis: {
       title: {
-        text: null
-      }
-    },
-    tooltip: {
-      formatter: function () {
-        return '<b>' + this.series.name + '</b><br/>' +
-          Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
-          Highcharts.numberFormat(this.y, 2);
+        text: '千瓦'
       }
     },
     legend: {
-      enabled: false
+      enabled: true,
     },
-    series: [{
-      type: 'spline',
-      name: '随机数据',
-      data: (function () {
-        // 生成随机值
-        var data = [], time = (new Date()).getTime(), i;
-        for (i = -19; i <= 0; i += 1) {
-          data.push({
-            x: time + i * 1000,
-            y: Math.random()
-          });
-        }
-        console.log(data);
-        return data;
-      }())
-    }]
-  }
+    series: [
+      {
+        type: 'spline',
+        name: '冷氣',
+        data: new Array
+      },
+      {
+        type: 'spline',
+        name: '機台',
+        data: new Array
+      }
+    ]
+  } as any
+  updateFlag=false;
 
-
-  constructor() { }
+  constructor(
+    public signalRService:SignalRService
+  ) { }
 
   ngOnInit(): void {
-    console.log('NGONINIT');
+    this.signalRService.StartConnection()
+    this.signalRService.addTransferBroadcastDataListener()
+    this.signalRService.$dataSpline.subscribe(x=>{
+      this.updateFlag=true
+      const dataList1=new Array
+      const dataList2=new Array
+      x=x.slice(1)
+      x.reverse().forEach((y,index)=>{
+        if(index % 2 ==0){
+          dataList1.push({
+            x: Date.parse(y.time+'+00:00'),
+            // x: new Date(y.time).getTime()* 1000,
+            y: y.SUM*110/1000
+         });
+        }else{
+          dataList2.push({
+            x: Date.parse(y.time+'+00:00'),
+            // x: new Date(y.time).getTime()* 1000,
+            y: y.SUM*110/1000
+         });
+        }
+      })
+      console.log(dataList2)
+      this.options.series[0].data=dataList1.slice(0,24).reverse()
+      this.options.series[1].data=dataList2.slice(0,24).reverse()
+    })
   }
 
 
   destroy(){
     if(this.timerId){
       clearInterval(this.timerId);
-      console.log('NGONDESTROY');
     }
   }
   ngOnDestroy(): void {
     if(this.timerId){
       clearInterval(this.timerId);
-      console.log('NGONDESTROY');
     }
   }
-}
-function activeLastPointToolip(chart: Highcharts.Chart) {
-  var points = chart.series[0].points;
-  chart.tooltip.refresh(points[points.length - 1]);
 }
 
 

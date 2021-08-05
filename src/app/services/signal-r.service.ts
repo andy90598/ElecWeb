@@ -1,3 +1,4 @@
+import { SplineData } from './../Models/SpLineData';
 import { AccumulationElec } from './../Models/AccumulationElec';
 import { ElecData } from 'src/app/Models/ElecData';
 import { Injectable } from '@angular/core';
@@ -14,14 +15,17 @@ export class SignalRService {
   private hubConnection!: signalR.HubConnection;
   //變數
   public elecData: Array<ElecData> = [];
-
   /// $data是可被觀察的物件 ，可以在其他component被subscribe
   private dataSubject = new BehaviorSubject<Array<ElecData>>([]);
   private dataSubjectBar = new BehaviorSubject<Array<AccumulationElec>>([]);
+  private dataSubjectSpline = new BehaviorSubject<Array<SplineData>>([]);
   $data = this.dataSubject.asObservable();
   $dataBar = this.dataSubjectBar.asObservable();
+  $dataSpline = this.dataSubjectSpline.asObservable();
+  splineTempLength=0
 
   public StartConnection=()=>{
+    this.splineTempLength=0
     this.hubConnection=new signalR.HubConnectionBuilder()
       // 後端網址
       .withUrl(environment.baseUrl+'dashboard')
@@ -55,7 +59,11 @@ export class SignalRService {
       this.dataSubjectBar.next(barData);
     });
     this.hubConnection.on('transferdataHour',(hourData)=>{
-      // console.log(hourData)
+      if(hourData.length!=this.splineTempLength){
+        this.dataSubjectSpline.next(hourData);
+        console.log(hourData)
+        this.splineTempLength=hourData.length;
+      }
     })
   }
 }

@@ -1,5 +1,11 @@
-<highcharts-chart
-  [Highcharts]="highchart"
-  [options]="options">
-</highcharts-chart>
-<button (click)="destroy()">AAAA</button>
+<div class="row">
+  <highcharts-chart
+    [Highcharts]="highchart"
+    [options]="options"
+    [(update)]="updateFlag"
+    class ="col-12"
+  >
+  </highcharts-chart>
+  <button (click)="destroy()">AAAA</button>
+</div>
+
