@@ -1,4 +1,4 @@
-import { AccumulationElec } from './../../Models/AccumulationElec';
+declare var require: any;
 import { SignalRService } from './../../services/signal-r.service';
 import { Chart } from 'angular-highcharts';
 import { DonutChart } from './../../Models/DonutChart';
@@ -7,7 +7,7 @@ import { ElecData } from 'src/app/Models/ElecData';
 import { ElecRowData } from 'src/app/Models/ElecRowData';
 import { HttpService } from 'src/app/services/http.service';
 import { Options } from 'highcharts';
-import { SplineChart } from 'src/app/Models/SplineChart';
+import { BarChart } from 'src/app/Models/BarChart';
 import * as Highcharts from 'highcharts';
 
 
@@ -28,76 +28,55 @@ export class DashboardComponent implements OnInit {
   //設備名稱表
   deviceNameList=["壞掉","機台","冷氣"]
   donutchart=new Chart();
-  splinechart = new Chart();
-
-  highChart=Highcharts;
-  chartOptions = Highcharts.setOptions({
-    chart:{
-      spacing : [0, 0 , 0, 0], //margin 上左下右
-
-      events: {
-        load: function () {
-        var series = this.series[0],
-            chart = this;
-        // activeLastPointToolip(chart);
-          setInterval(function () {
-          // activeLastPointToolip(chart);
-        }, 1000);
-      }
-      }
-    },
-    title:{
-      text:"用電比例",
-      align:'center',
-      y:25,
-      style:{
-        fontSize:'2em'
-      }
-    },
-    //商標
-    credits:{
-      enabled:false
-    },
-    //滑鼠移上去時顯示的文字方塊
-    tooltip:{
-      pointFormat:'{series.name}: <b>{point.y:.1f}A</b>'
-    },
-    // 针对不同类型图表的配置
-    legend:{
-      align:'center',
-      verticalAlign:'top',
-      margin:0,
-      reversed:true
-    },
-    plotOptions: {
-      pie: {
-        showInLegend: true,
-        allowPointSelect: true, //可被選取
-        cursor: 'pointer', //指標變滑鼠
-        dataLabels: {
-          enabled: true,
-          distance:'-30%',
-          // format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-          format: '{point.percentage:.1f} %',
-          style: {
-            color: 'black',
-            fontSize:'18px'
-          }
-        },
-      },
-    },
-    // 数据列，图表上一个或多个数据系列
-    series:[{
-      size: '80%',
-      name: '比例',
-      innerSize:'60%',
-      type:"pie",
-      data: [
-        ["AAA",123],
-        ["BBB",456]
-      ]
-    }]
-  });
+  updateFlag = false;
+  Highcharts = Highcharts;
+  chartConstructor = "chart";
+  // chartOptions={
+  //   chart:{
+  //     type:'bar',
+  //     spacing : [20, 0 , 0, 0], //margin 上左下右,
+  //   },
+  //   title: {
+  //     text: '當前耗電量/瓦'
+  //   },
+  //   subtitle: {
+  //     text: ""
+  //   },
+  //   exporting:{
+  //     enabled:true
+  //   },
+  //   plotOptions: {
+  //     bar:{
+  //       showInLegend: false,
+  //       colorByPoint: true,
+  //       dataLabels: {
+  //         enabled: true,
+  //         format: '{y} 瓦',
+  //         style: {
+  //           fontSize:'24px'
+  //         }
+  //       },
+  //     }
+  //   },
+  //   xAxis: {
+  //       categories: ['機台', '冷氣'],
+  //       title: {
+  //         text: '設備名稱'
+  //       }
+  //   },
+  //   yAxis: {
+  //     title: {
+  //       text: '瓦'
+  //     }
+  //   },
+  //   series: [
+  //     {
+  //       type:"bar",
+  //       data:[1,2],
+  //     }
+  //   ]
+  // } as any
+  barChart = new BarChart;
 
   constructor(
     private httpService:HttpService,
@@ -134,40 +113,19 @@ export class DashboardComponent implements OnInit {
     })
 
     this.signalRService.$dataBar.subscribe(x=>{
-      let options2=new SplineChart();
-      const accumulationElecList=new Array;
+      const accumulationElecList =new Array
       let time=""
       x.forEach(y=>{
         accumulationElecList.push(Math.round(y.value*110))
         time=y.time
       })
-      options2.options.subtitle.text+=time
-      Array.prototype.push.apply(options2.options.series[0].data,accumulationElecList)
-      this.splinechart=new Chart(options2.options as Options)
-      // console.log(this.splinechart)
+      this.barChart.chartOptions.series[0].data=accumulationElecList ;
+      this.barChart.chartOptions.subtitle.text="最後更新時間: "+time;
+      this.updateFlag=true;
     })
-
-    this.id=setInterval(()=>{
-      console.log('aaa')
-      this.GetInit();
-    },1000)
   }
 
   GetInit(){
-    this. GetRowData();
-  }
 
-  GetRowData(){
-    this.httpService.get("http://192.168.140.80:9100/list").subscribe(x=>{
-      this.elecRowDataList=x
-      // console.log('this.elecRowDataList',this.elecRowDataList)
-    })
   }
-
-  ngOnDestroy() {
-    if (this.id) {
-      clearInterval(this.id);
-    }
-  }
-
 }

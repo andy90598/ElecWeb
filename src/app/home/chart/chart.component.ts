@@ -1,8 +1,8 @@
-import { Chart } from 'angular-highcharts';
+
 import { Component, OnInit } from '@angular/core';
 import * as Highcharts from 'highcharts';
-import { interval } from 'rxjs';
 import { Options } from 'highcharts';
+
 
 
 @Component({
@@ -19,14 +19,12 @@ export class ChartComponent implements OnInit {
       marginRight: 10,
       events: {
         load:  () =>{
-          var series = this.highchart.charts[this.highchart.charts.length-1]?.series[0],
-            chart = this;
+          var series = this.highchart.charts[this.highchart.charts.length-1]?.series[0]
           this.timerId = setInterval(function () {
             var x = (new Date()).getTime(), // 当前时间
-              y = Math.random();          // 随机值
-            console.log('chart1', y);
+              y = Math.random();        // 随机值
+              console.log('im back');
             series?.addPoint([x, y], true, true);
-            console.log(series)
           }, 5000);
         }
       }
@@ -71,18 +69,25 @@ export class ChartComponent implements OnInit {
     }]
   }
 
-  chartOptios = this.highchart.setOptions(this.options)
-  constructor() { }
-  ngOnInit(): void {
 
+  constructor() { }
+
+  ngOnInit(): void {
     console.log('NGONINIT');
   }
 
+
+  destroy(){
+    if(this.timerId){
+      clearInterval(this.timerId);
+      console.log('NGONDESTROY');
+    }
+  }
   ngOnDestroy(): void {
     if(this.timerId){
       clearInterval(this.timerId);
+      console.log('NGONDESTROY');
     }
-    console.log('NGONDESTROY');
   }
 }
 function activeLastPointToolip(chart: Highcharts.Chart) {

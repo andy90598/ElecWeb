@@ -52,18 +52,19 @@
     <hr>
     <div class="row">
       <div class="col-lg-3 col-md-4">
+
         <div [chart]="donutchart"></div>
       </div>
-       <div class="col-lg-9 col-md-8">
-       <!-- <highcharts-chart
-          [Highcharts]="highChart"
-          [options]="chartOptions"
-        >
-
-        </highcharts-chart> -->
-        <div [chart]="splinechart"></div>
-      </div>
+      <highcharts-chart
+          [Highcharts]="Highcharts"
+          [constructorType]="chartConstructor"
+          [options]="barChart.chartOptions"
+          [(update)]="updateFlag"
+          [oneToOne]="true"
+          class="col-lg-9 col-md-8">
+      </highcharts-chart>
     </div>
+
 
 </div>
 
