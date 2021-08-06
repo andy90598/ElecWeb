@@ -19,9 +19,13 @@ export class SignalRService {
   private dataSubject = new BehaviorSubject<Array<ElecData>>([]);
   private dataSubjectBar = new BehaviorSubject<Array<AccumulationElec>>([]);
   private dataSubjectSpline = new BehaviorSubject<Array<SplineData>>([]);
+  private dataSubjectDate = new BehaviorSubject<Array<SplineData>>([]);
+  private dataSubjectMonth = new BehaviorSubject<Array<SplineData>>([]);
   $data = this.dataSubject.asObservable();
   $dataBar = this.dataSubjectBar.asObservable();
   $dataSpline = this.dataSubjectSpline.asObservable();
+  $dataDate = this.dataSubjectDate.asObservable();
+  $dataMonth = this.dataSubjectMonth.asObservable();
   splineTempLength=0
 
   public StartConnection=()=>{
@@ -61,9 +65,17 @@ export class SignalRService {
     this.hubConnection.on('transferdataHour',(hourData)=>{
       if(hourData.length!=this.splineTempLength){
         this.dataSubjectSpline.next(hourData);
-        console.log(hourData)
+        // console.log(hourData)
         this.splineTempLength=hourData.length;
       }
     })
+    this.hubConnection.on('transferdataDate',(dateData)=>{
+      // console.log(dateData);
+      this.dataSubjectDate.next(dateData);
+    });
+    this.hubConnection.on('transferdataMonth',(monthData)=>{
+      // console.log(monthData);
+      this.dataSubjectMonth.next(monthData);
+    });
   }
 }

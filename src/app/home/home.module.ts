@@ -7,11 +7,15 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { ChartComponent } from './chart/chart.component';
 import { ChartModule } from 'angular-highcharts';
 import { HighchartsChartModule } from 'highcharts-angular';
+import { Spline1Component } from './chart/spline1/spline1/spline1.component';
+import { Spline2Component } from './chart/spline2/spline2.component';
 
 @NgModule({
   declarations: [
     DashboardComponent,
     ChartComponent,
+    Spline1Component,
+    Spline2Component,
   ],
   imports: [
     CommonModule,
