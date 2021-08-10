@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { SignalRService } from '../services/signal-r.service';
 @Component({
   selector: 'app-layout',
   templateUrl: './layout.component.html',
@@ -8,11 +9,16 @@ import { Router } from '@angular/router';
 export class LayoutComponent implements OnInit {
   path='dashboard'
   constructor(
-    private router:Router
+    private router:Router,
+    public signalRService:SignalRService
   ) { }
 
   ngOnInit(): void {
     this.path=this.router.url.split('/').pop() as any;
+    //連接singalR
+    this.signalRService.StartConnection()
+    //signalR事件監聽器
+    this.signalRService.addTransferBroadcastDataListener()
   }
   Goto(path:string){
     this.router.navigate(['/home/'+path]);

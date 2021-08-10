@@ -55,6 +55,7 @@
       <highcharts-chart
           [Highcharts]="Highcharts"
           [constructorType]="chartConstructor"
+          [callbackFunction]="chartCallback"
           [options]="donutchart.options"
           [(update)]="updateFlag"
           [oneToOne]="true"
@@ -64,6 +65,7 @@
       <highcharts-chart
           [Highcharts]="Highcharts"
           [constructorType]="chartConstructor"
+          [callbackFunction]="chartCallback"
           [options]="barChart.chartOptions"
           [(update)]="updateFlag"
           [oneToOne]="true"

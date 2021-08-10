@@ -63,8 +63,6 @@ export class Spline1Component implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.signalRService.StartConnection()
-    this.signalRService.addTransferBroadcastDataListener()
     this.signalRService.$dataSpline.subscribe(x=>{
       this.updateFlag=true
       const dataList1=new Array

@@ -2,6 +2,7 @@ export class DonutChart{
   public options={
     chart:{
       spacing : [0, 0 , 0, 0], //margin 上左下右
+      events:{},
     },
     title:{
       text:"用電比例",

@@ -21,11 +21,13 @@ export class SignalRService {
   private dataSubjectSpline = new BehaviorSubject<Array<SplineData>>([]);
   private dataSubjectDate = new BehaviorSubject<Array<SplineData>>([]);
   private dataSubjectMonth = new BehaviorSubject<Array<SplineData>>([]);
+  private dataSubjectNow = new BehaviorSubject<Array<ElecData>>([]);
   $data = this.dataSubject.asObservable();
   $dataBar = this.dataSubjectBar.asObservable();
   $dataSpline = this.dataSubjectSpline.asObservable();
   $dataDate = this.dataSubjectDate.asObservable();
   $dataMonth = this.dataSubjectMonth.asObservable();
+  $dataNow = this.dataSubjectNow.asObservable();
   splineTempLength=0
 
   public StartConnection=()=>{
@@ -38,7 +40,10 @@ export class SignalRService {
       .build();
     this.hubConnection
       .start()
-      .then(()=>console.log("Connecting started"))
+      .then(()=>{
+        console.log("Connecting started")
+        this.RefreshDashBoardData();
+      })
       .catch(err=>console.log('Error while starting connection: '+err));
   }
 
@@ -46,16 +51,16 @@ export class SignalRService {
     return this.hubConnection;
   }
   Register(sID:number):void{
-    console.log(this.hubConnection.state);
+    console.log(this.hubConnection.state)
     this.hubConnection.invoke('Register',sID).then(data=>{
       console.log(data);
     });
   }
+
   public addTransferBroadcastDataListener =()=>{
     //訂閱 transferdata
     this.hubConnection.on('transferdata',(data)=>{
       // console.log(data)
-      this.elecData=data;
       this.dataSubject.next(data);
     });
     this.hubConnection.on('transferdataBar',(barData)=>{
@@ -77,5 +82,14 @@ export class SignalRService {
       // console.log(monthData);
       this.dataSubjectMonth.next(monthData);
     });
+    this.hubConnection.on('RefreshDashBoardData',(nowData)=>{
+      console.log(nowData);
+      this.elecData=nowData;
+      this.dataSubjectNow.next(nowData);
+    });
+  }
+
+  RefreshDashBoardData(): void {
+    this.hubConnection.invoke('ReturnDashBoardDataToAll').catch((err: any) => console.error(err));
   }
 }

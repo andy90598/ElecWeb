@@ -87,20 +87,31 @@ export class Spline2Component implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.signalRService.StartConnection()
-    this.signalRService.addTransferBroadcastDataListener()
     this.signalRService.$dataMonth.subscribe(x=>{
       this.updateFlag=true
       const dataList1= {name:'',data:new Array(12).fill(0)};
       const dataList2= {name:'',data:new Array(12).fill(0)};
+      console.log(x)
       x.forEach((x)=>{
         if(x.uuid == '0081F924C0C6'){
           dataList1.name='0081F924C0C6';
-          dataList1.data[x.time-1]=Math.round((x.SUM*110/1000)*1000)/1000;
+          if(x.time-1 in[0,2,4,6,7,9,11]){
+            dataList1.data[x.time-1]=(Math.round((x.SUM*110/1000)*1000)/1000)*31;
+          }else if(x.time-1 in [3,5,8,10]){
+            dataList1.data[x.time-1]=(Math.round((x.SUM*110/1000)*1000)/1000)*30;
+          }else{
+            dataList1.data[x.time-1]=(Math.round((x.SUM*110/1000)*1000)/1000)*28;
+          }
         }
         if(x.uuid == '0081F9254F0F'){
           dataList2.name='0081F9254F0F';
-          dataList2.data[x.time-1]=Math.round((x.SUM*110/1000)*1000)/1000;
+          if(x.time-1 in[0,2,4,6,7,9,11]){
+            dataList2.data[x.time-1]=(Math.round((x.SUM*110/1000)*1000)/1000)*31;
+          }else if(x.time-1 in [3,5,8,10]){
+            dataList2.data[x.time-1]=(Math.round((x.SUM*110/1000)*1000)/1000)*30;
+          }else{
+            dataList2.data[x.time-1]=(Math.round((x.SUM*110/1000)*1000)/1000)*28;
+          }
         }
       });
       this.options.series=[dataList1,dataList2];
