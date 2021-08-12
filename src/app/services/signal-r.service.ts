@@ -28,10 +28,13 @@ export class SignalRService {
   $dataDate = this.dataSubjectDate.asObservable();
   $dataMonth = this.dataSubjectMonth.asObservable();
   $dataNow = this.dataSubjectNow.asObservable();
-  splineTempLength=0
+  show=true;
+  splineTempLength=0;
+  monthTempLength=0;
 
   public StartConnection=()=>{
-    this.splineTempLength=0
+  this.monthTempLength=0
+  this.splineTempLength=0
     this.hubConnection=new signalR.HubConnectionBuilder()
       // 後端網址
       .withUrl(environment.baseUrl+'dashboard')
@@ -41,8 +44,8 @@ export class SignalRService {
     this.hubConnection
       .start()
       .then(()=>{
-        console.log("Connecting started")
         this.RefreshDashBoardData();
+        console.log("Connecting started")
       })
       .catch(err=>console.log('Error while starting connection: '+err));
   }
@@ -64,26 +67,32 @@ export class SignalRService {
       this.dataSubject.next(data);
     });
     this.hubConnection.on('transferdataBar',(barData)=>{
-      // console.log(barData);
+      // console.log('barData= ',barData);
       this.dataSubjectBar.next(barData);
     });
     this.hubConnection.on('transferdataHour',(hourData)=>{
       if(hourData.length!=this.splineTempLength){
-        this.dataSubjectSpline.next(hourData);
         // console.log(hourData)
+        this.dataSubjectSpline.next(hourData);
+        // console.log('hourData= ',hourData)
         this.splineTempLength=hourData.length;
       }
     })
     this.hubConnection.on('transferdataDate',(dateData)=>{
-      // console.log(dateData);
+      // console.log('dateData= ',dateData);
       this.dataSubjectDate.next(dateData);
     });
     this.hubConnection.on('transferdataMonth',(monthData)=>{
-      // console.log(monthData);
-      this.dataSubjectMonth.next(monthData);
+      //每次資料長度有異動時 = 有增加新的值 再推送到圖表
+      if(monthData.length!=this.monthTempLength){
+
+        this.dataSubjectMonth.next(monthData);
+        // console.log('monthData= ',monthData);
+        this.monthTempLength=monthData.length;
+      }
     });
     this.hubConnection.on('RefreshDashBoardData',(nowData)=>{
-      console.log(nowData);
+      console.log('nowData= ',nowData);
       this.elecData=nowData;
       this.dataSubjectNow.next(nowData);
     });
