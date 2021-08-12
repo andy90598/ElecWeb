@@ -7,7 +7,7 @@ import { SignalRService } from '../services/signal-r.service';
   styleUrls: ['./layout.component.css']
 })
 export class LayoutComponent implements OnInit {
-  path='dashboard'
+  path='dashboard';
   constructor(
     private router:Router,
     public signalRService:SignalRService

@@ -27,7 +27,7 @@ export class BarChart{
       }
     },
     xAxis: {
-        categories: ['機台', '冷氣'],
+        categories: ["電燈","冷氣","電腦A","電腦B","電腦C","電腦D","冷氣E"],
         title: {
           text: '設備名稱'
         }

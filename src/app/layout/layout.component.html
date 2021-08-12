@@ -1,3 +1,16 @@
+<!-- 控制loading -->
+<div [ngClass]="{'loading': this.signalRService.show}">
+  <div class="loader">
+    <div class="loader-wrapper">
+      <p class="fa-2x text-white" style="font-size: 48px;">資料處理中</p>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
 
 <!-- 頁首 -->
 <div class="navbar navbar-dark bg-primary">

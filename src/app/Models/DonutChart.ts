@@ -25,7 +25,6 @@ export class DonutChart{
       align:'center',
       verticalAlign:'top',
       margin:0,
-      reversed:true
     },
     plotOptions: {
       pie: {
@@ -34,7 +33,7 @@ export class DonutChart{
         cursor: 'pointer', //指標變滑鼠
         dataLabels: {
           enabled: true,
-          distance:'-30%',
+          distance:'5%',
           // format: '<b>{point.name}</b>: {point.percentage:.1f} %',
           format: '{point.percentage:.1f} %',
           style: {

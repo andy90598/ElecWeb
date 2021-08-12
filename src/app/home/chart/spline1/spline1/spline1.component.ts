@@ -1,3 +1,4 @@
+import { HomeService } from './../../../home.service';
 import { Component, OnInit } from '@angular/core';
 import * as Highcharts from 'highcharts';
 import { SignalRService } from 'src/app/services/signal-r.service';
@@ -25,8 +26,14 @@ export class Spline1Component implements OnInit {
       spline: {
         dataLabels: {
             enabled: false
-        },
+        }
+      },
+      series: {
+        marker: {
+            enabled: true
+        }
       }
+
     },
     xAxis: {
       title: {
@@ -34,6 +41,7 @@ export class Spline1Component implements OnInit {
       },
       type: 'datetime',
       tickInterval:3600 * 1000,
+      min:null as any
     },
     yAxis: {
       title: {
@@ -43,46 +51,56 @@ export class Spline1Component implements OnInit {
     legend: {
       enabled: true,
     },
-    series: [
-      {
-        type: 'spline',
-        name: '冷氣',
-        data: new Array
-      },
-      {
-        type: 'spline',
-        name: '機台',
-        data: new Array
-      }
-    ]
+    series: []
   } as any
   updateFlag=false;
+  chartList = new Array();
+  today = new Date();
 
   constructor(
-    public signalRService:SignalRService
+    public signalRService:SignalRService,
+    public homeService:HomeService
   ) { }
 
   ngOnInit(): void {
+    this.signalRService.show=true;
+    this.CreatDataList();
+    this.GetOnInit();
+  }
+  GetOnInit(){
     this.signalRService.$dataSpline.subscribe(x=>{
-      this.updateFlag=true
-      const dataList1=new Array
-      const dataList2=new Array
-      x=x.slice(1)
-      x.reverse().forEach((y,index)=>{
-        if(index % 2 ==0){
-          dataList1.push({
-            x: Date.parse(y.time+'+00:00'),
-            y: y.SUM*110/1000
-         });
-        }else{
-          dataList2.push({
-            x: Date.parse(y.time+'+00:00'),
-            y: y.SUM*110/1000
-         });
+      if(x!=[]){
+        // 關閉loading畫面
+        this.signalRService.show=false
+        this.today = new Date();
+        // 取得後端 'time = 今天' 的資料 並存成陣列
+        let todayDataList = new Array;
+        x.forEach(y=>{
+          if(this.today.getDate()==new Date(y.time).getDate()){
+            todayDataList.push(y);
+          }
+        })
+        // 如果(資料筆數 % 設備數量==0) 才更新，因為每個溝表時間不同 每個整點要等資料齊全才能塞到圖表
+        if (todayDataList.length % this.homeService.deviceNameList.length ==0 ){
+          todayDataList.forEach((z,index)=>{
+            this.chartList[index%this.homeService.deviceNameList.length].data.push({x:Date.parse(z.time+'+00:00'),y:z.SUM})
+          })
+          // 取得今天0時作為x軸的起始點
+          this.options.xAxis.min = Date.parse(new Date(this.today.getFullYear(),this.today.getMonth(),this.today.getDate(),0,0,0).toString()+'+00:00');
+          // 塞data到series的data
+          this.options.series=this.chartList;
+          //更新圖表的series
+          this.updateFlag=true;
         }
-      })
-      this.options.series[0].data=dataList1.slice(0,24).reverse()
-      this.options.series[1].data=dataList2.slice(0,24).reverse()
+      }
     })
   }
+  // 創陣列符合spline圖表 series的格式 {type:'spline',name:this.nameList[i],data:[]}
+  // data之後再GetOnIt塞
+  CreatDataList(){
+    for(let i=0;i<this.homeService.deviceNameList.length;i++){
+      this.chartList.push({type:'spline',name:this.homeService.deviceNameList[i],data:[]});
+    }
+  }
+
 }

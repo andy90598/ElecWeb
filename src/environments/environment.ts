@@ -5,6 +5,8 @@
 export const environment = {
   production: false,
   baseUrl:'http://localhost:5001/'
+  // baseUrl:'http://csu.done.com.tw/ElecManage/'
+
 };
 
 /*
