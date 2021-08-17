@@ -4,7 +4,7 @@ import { ElecData } from 'src/app/Models/ElecData';
 import { Injectable } from '@angular/core';
 import * as signalR from '@microsoft/signalr'
 import { environment } from 'src/environments/environment';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 
 
 @Injectable({
@@ -72,7 +72,7 @@ export class SignalRService {
     });
     this.hubConnection.on('transferdataHour',(hourData)=>{
       if(hourData.length!=this.splineTempLength){
-        // console.log(hourData)
+        console.log(hourData)
         this.dataSubjectSpline.next(hourData);
         // console.log('hourData= ',hourData)
         this.splineTempLength=hourData.length;
@@ -85,14 +85,14 @@ export class SignalRService {
     this.hubConnection.on('transferdataMonth',(monthData)=>{
       //每次資料長度有異動時 = 有增加新的值 再推送到圖表
       if(monthData.length!=this.monthTempLength){
-
+        // console.log(monthData)
         this.dataSubjectMonth.next(monthData);
         // console.log('monthData= ',monthData);
         this.monthTempLength=monthData.length;
       }
     });
     this.hubConnection.on('RefreshDashBoardData',(nowData)=>{
-      console.log('nowData= ',nowData);
+      // console.log('nowData= ',nowData);
       this.elecData=nowData;
       this.dataSubjectNow.next(nowData);
     });

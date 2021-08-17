@@ -1,6 +1,5 @@
-import { SplineData } from './../../../Models/SpLineData';
+import { HomeService } from './../../home.service';
 import { Component, OnInit } from '@angular/core';
-import { now } from 'd3';
 import * as Highcharts from 'highcharts';
 import { SignalRService } from 'src/app/services/signal-r.service';
 
@@ -10,9 +9,7 @@ import { SignalRService } from 'src/app/services/signal-r.service';
   styleUrls: ['./spline2.component.css']
 })
 export class Spline2Component implements OnInit {
-  aa:any
   highchart = Highcharts;
-  timerId : any;
   options={
     chart: {
       type: 'column'
@@ -79,87 +76,47 @@ export class Spline2Component implements OnInit {
       }
     ]
   }  as any
+  //最後塞到data的是這個
+  chartList = new Array();
+  //做資料處理用
+  chartList2 = new Array();
   updateFlag=false;
 
 
   constructor(
-    public signalRService:SignalRService
+    public signalRService:SignalRService,
+    public homeService:HomeService
   ) { }
 
   ngOnInit(): void {
+    this.CreatDataList()
     this.GetOnInit()
   }
 
   GetOnInit(){
     this.signalRService.$dataMonth.subscribe(x=>{
-      // console.log(x)
+      console.log(x)
       this.updateFlag=true
-      const dataList1= {name:'',data:new Array(12).fill(0)};
-      const dataList2= {name:'',data:new Array(12).fill(0)};
-      // console.log(x)
       x.forEach((x)=>{
-        if(x.uuid == '0081F924C0C6'){
-          dataList1.name='0081F924C0C6';
-          if(x.time-1 in[0,2,4,6,7,9,11]){
-            dataList1.data[x.time-1]=(Math.round((x.SUM*110/1000)*1000)/1000)*31;
-          }else if(x.time-1 in [3,5,8,10]){
-            dataList1.data[x.time-1]=(Math.round((x.SUM*110/1000)*1000)/1000)*30;
-          }else{
-            dataList1.data[x.time-1]=(Math.round((x.SUM*110/1000)*1000)/1000)*28;
+        this.chartList2.forEach((y,index)=>{
+          if (y.deviceId==x.uuid){
+            // 電流*電壓/1000變成千瓦  然後*當月用電天數
+            this.chartList[index].data[x.time-1]=(Math.round((x.sum*110/1000)*1000)/1000)*x.dayCount
           }
-        }
-        if(x.uuid == '0081F9254F0F'){
-          dataList2.name='0081F9254F0F';
-          if(x.time-1 in[0,2,4,6,7,9,11]){
-            dataList2.data[x.time-1]=(Math.round((x.SUM*110/1000)*1000)/1000)*31;
-          }else if(x.time-1 in [3,5,8,10]){
-            dataList2.data[x.time-1]=(Math.round((x.SUM*110/1000)*1000)/1000)*30;
-          }else{
-            dataList2.data[x.time-1]=(Math.round((x.SUM*110/1000)*1000)/1000)*28;
-          }
-        }
+        })
       });
-      this.options.series=[dataList1,dataList2];
-      // console.log(' this.options.series=  ', this.options.series)
+      this.options.series=this.chartList;
+      console.log('this.options.series=  ', this.options.series)
     })
   }
 
   // 創陣列符合bar圖表 series的格式 {name:this.nameList[i],data:[]}
   // data之後再GetOnIt塞
   CreatDataList(){
-
+    for (let i=0;i<this.homeService.deviceNameList.length;i++){
+      // data=創一個長度為12且填滿0的Array
+      this.chartList.push({name:this.homeService.deviceNameList[i],data:new Array(12).fill(0)})
+      this.chartList2.push({deviceId:this.homeService.deviceIDList[i],name:this.homeService.deviceNameList[i],data:new Array(12).fill(0)})
+    }
   }
-
-  // GetOnInit(){
-  //   this.signalRService.$dataMonth.subscribe(x=>{
-  //     this.updateFlag=true
-  //     const dataList1= {name:'',data:new Array(12).fill(0)};
-  //     const dataList2= {name:'',data:new Array(12).fill(0)};
-  //     // console.log(x)
-  //     x.forEach((x)=>{
-  //       if(x.uuid == '0081F924C0C6'){
-  //         dataList1.name='0081F924C0C6';
-  //         if(x.time-1 in[0,2,4,6,7,9,11]){
-  //           dataList1.data[x.time-1]=(Math.round((x.SUM*110/1000)*1000)/1000)*31;
-  //         }else if(x.time-1 in [3,5,8,10]){
-  //           dataList1.data[x.time-1]=(Math.round((x.SUM*110/1000)*1000)/1000)*30;
-  //         }else{
-  //           dataList1.data[x.time-1]=(Math.round((x.SUM*110/1000)*1000)/1000)*28;
-  //         }
-  //       }
-  //       if(x.uuid == '0081F9254F0F'){
-  //         dataList2.name='0081F9254F0F';
-  //         if(x.time-1 in[0,2,4,6,7,9,11]){
-  //           dataList2.data[x.time-1]=(Math.round((x.SUM*110/1000)*1000)/1000)*31;
-  //         }else if(x.time-1 in [3,5,8,10]){
-  //           dataList2.data[x.time-1]=(Math.round((x.SUM*110/1000)*1000)/1000)*30;
-  //         }else{
-  //           dataList2.data[x.time-1]=(Math.round((x.SUM*110/1000)*1000)/1000)*28;
-  //         }
-  //       }
-  //     });
-  //     this.options.series=[dataList1,dataList2];
-  //   })
-  // }
-
 }

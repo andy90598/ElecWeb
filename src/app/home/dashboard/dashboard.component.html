@@ -5,15 +5,15 @@
       <ng-container *ngFor="let item of elecDataList ;let i =index">
         <div class="col-xs-6 col-sm-4 placeholder">
           <radial-gauge
-            [attr.value]="item.value*110/1000"
+
             title="Watt"
             units="Kw"
             width="200"
             height="200"
 
-            min-value="0.1"
-            max-value="0.9"
-            major-ticks="0.1,0.3,0.5,0.7,0.9"
+            min-value="0.0"
+            max-value="1.5"
+            major-ticks="0.0,0.3,0.6,0.9,0.12,0.15"
             minor-ticks="2"
 
             needle-type="arrow"
@@ -29,13 +29,18 @@
             color-needle-circle-outer="#333"
             color-needle-circle-outer-end="#111"
 
+            animation="true"
+            animateOnInit="true"
+            animated-Value="true"
             animation-duration="900"
             animation-rule="linear"
             glow="true"
-            highlights='[{"from": 0.1, "to": 0.3, "color": "#eee"},
-                        {"from": 0.3, "to": 0.5, "color": "#ccc"},
-                        {"from": 0.5, "to": 0.7, "color": "#aaa"},
-                        {"from": 0.7, "to": 0.9, "color": "#eaa"}]'
+            highlights='[{"from": 0.0, "to": 0.3, "color": "#eee"},
+                        {"from": 0.3, "to": 0.6, "color": "#ccc"},
+                        {"from": 0.6, "to": 0.9, "color": "#aaa"},
+                        {"from": 0.9, "to": 1.2, "color": "#eea"},
+                        {"from": 1.2, "to": 1.5, "color": "#eaa"}]'
+            [attr.Value]="(item.value*item.volt/1000)"
           ></radial-gauge>
           <h4>
             {{item.uuid}}<br>
