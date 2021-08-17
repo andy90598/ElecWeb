@@ -55,6 +55,7 @@ export class Spline1Component implements OnInit {
   } as any
 
   updateFlag=false;
+  //最後塞到series data的是這個
   chartList = new Array();
   today = new Date();
 
@@ -82,14 +83,13 @@ export class Spline1Component implements OnInit {
       let todayDataList = new Array;
       x.forEach(y=>{
         if(this.today.getDate()==new Date(y.time).getDate()){
-          todayDataList.push(y);
+          x.push(y);
         }
       })
-      console.log(todayDataList)
       // 如果(資料筆數 % 設備數量==0) 才更新，因為每個溝表時間不同 每個整點要等資料齊全才能塞到圖表
-      if (todayDataList.length % this.homeService.deviceNameList.length ==0 ){
-        todayDataList.forEach((z,index)=>{
-          this.chartList[index%this.homeService.deviceNameList.length].data.push({x:Date.parse(z.time+'+00:00'),y:z.SUM})
+      if (x.length % this.homeService.deviceNameList.length ==0 ){
+        x.forEach((z,index)=>{
+          this.chartList[index%this.homeService.deviceNameList.length].data.push({x:Date.parse(z.time+'+00:00'),y:z.sum})
         })
         // 取得今天0時作為x軸的起始點
         this.options.xAxis.min = Date.parse(new Date(this.today.getFullYear(),this.today.getMonth(),this.today.getDate(),0,0,0).toString()+'+00:00');
