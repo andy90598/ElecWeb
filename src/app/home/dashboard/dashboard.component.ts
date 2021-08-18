@@ -2,7 +2,7 @@ import { AccumulationElec } from './../../Models/AccumulationElec';
 import { HomeService } from './../home.service';
 import { SignalRService } from './../../services/signal-r.service';
 import { DonutChart } from './../../Models/DonutChart';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ElecData } from 'src/app/Models/ElecData';
 import { ElecRowData } from 'src/app/Models/ElecRowData';
 import { BarChart } from 'src/app/Models/BarChart';
@@ -15,7 +15,7 @@ import * as Highcharts from 'highcharts';
   styleUrls: ['./dashboard.component.css']
 })
 
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit{
   @ViewChild("Ac_Server") element!: ElementRef;
   //從192.168.140.80:9100撈到的資料
   elecRowDataList:Array<ElecRowData>=[];
@@ -37,13 +37,14 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     public signalRService:SignalRService,
-    public homeService:HomeService
+    public homeService:HomeService,
+    private cd:ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
     // 一開始近來顯示loading
     this.signalRService.show=true;
-    this.signalRService.$dataBar.subscribe(x=>{
+    this.signalRService.$dataNow.subscribe(x=>{
       let elecDeviceList=new Array();
       // 讓elecDataList = 訂閱收到的值
       this.elecDataList=x
@@ -108,4 +109,5 @@ export class DashboardComponent implements OnInit {
       this.updateFlag=true;
     })
   }
+
 }

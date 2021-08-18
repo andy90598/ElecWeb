@@ -65,39 +65,34 @@ export class Spline1Component implements OnInit {
   ) {
   }
 
-  ngOnInit(): void {
+   ngOnInit(): void {
     this.signalRService.show=true;
     this.CreatDataList();
     this.GetOnInit();
   }
-  GetOnInit(){
-    this.signalRService.$dataSpline.subscribe(x=>{
-      // 關閉loading畫面
-      if(x.length!=0){
-        this.signalRService.show=false
-      }
+    GetOnInit(){
+      this.signalRService.$dataSpline.subscribe(x=>{
+        // 關閉loading畫面
+        if(x.length!=0){
+          this.signalRService.show=false
+        }
 
       this.today = new Date();
       this.options.subtitle.text ='最後更新時間:'+this.today.toLocaleString();
-      // 取得後端 'time = 今天' 的資料 並存成陣列
-      let todayDataList = new Array;
-      x.forEach(y=>{
-        if(this.today.getDate()==new Date(y.time).getDate()){
-          x.push(y);
-        }
-      })
       // 如果(資料筆數 % 設備數量==0) 才更新，因為每個溝表時間不同 每個整點要等資料齊全才能塞到圖表
-      if (x.length % this.homeService.deviceNameList.length ==0 ){
-        x.forEach((z,index)=>{
-          this.chartList[index%this.homeService.deviceNameList.length].data.push({x:Date.parse(z.time+'+00:00'),y:z.sum})
-        })
-        // 取得今天0時作為x軸的起始點
-        this.options.xAxis.min = Date.parse(new Date(this.today.getFullYear(),this.today.getMonth(),this.today.getDate(),0,0,0).toString()+'+00:00');
-        // 塞data到series的data
-        this.options.series=this.chartList;
-        //更新圖表的series
-        this.updateFlag=true;
-      }
+
+      x.forEach((z,index)=>{
+        this.signalRService.show=false
+        // y是chartList z是hourdata
+        // 如果chartList的name==hourData的name 則 push data
+        this.chartList.find(y=>y.name == z.name).data.push({x:Date.parse(z.time+'+00:00'),y:z.sum})
+      })
+      // 取得今天0時作為x軸的起始點
+      this.options.xAxis.min = Date.parse(new Date(this.today.getFullYear(),this.today.getMonth(),this.today.getDate(),0,0,0).toString()+'+00:00');
+      // 塞data到series的data
+      this.options.series=this.chartList;
+      //更新圖表的series
+      this.updateFlag=true;
     })
   }
   // 創陣列符合spline圖表 series的格式 {type:'spline',name:this.nameList[i],data:[]}

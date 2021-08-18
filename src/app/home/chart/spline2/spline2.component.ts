@@ -95,7 +95,7 @@ export class Spline2Component implements OnInit {
 
   GetOnInit(){
     this.signalRService.$dataMonth.subscribe(x=>{
-      console.log(x)
+      // console.log(x)
       this.updateFlag=true
       x.forEach((x)=>{
         this.chartList2.forEach((y,index)=>{
@@ -106,7 +106,7 @@ export class Spline2Component implements OnInit {
         })
       });
       this.options.series=this.chartList;
-      console.log('this.options.series=  ', this.options.series)
+      // console.log('this.options.series=  ', this.options.series)
     })
   }
 

@@ -1,10 +1,11 @@
+import { HomeService } from './../home/home.service';
 import { SplineData } from './../Models/SpLineData';
 import { AccumulationElec } from './../Models/AccumulationElec';
 import { ElecData } from 'src/app/Models/ElecData';
 import { Injectable } from '@angular/core';
 import * as signalR from '@microsoft/signalr'
 import { environment } from 'src/environments/environment';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject, ReplaySubject, Subject } from 'rxjs';
 
 
 @Injectable({
@@ -14,14 +15,14 @@ export class SignalRService {
   //連線
   private hubConnection!: signalR.HubConnection;
   //變數
-  public elecData: Array<ElecData> = [];
+  public elecData: Array<AccumulationElec> = [];
   /// $data是可被觀察的物件 ，可以在其他component被subscribe
   private dataSubject = new BehaviorSubject<Array<ElecData>>([]);
   private dataSubjectBar = new BehaviorSubject<Array<AccumulationElec>>([]);
   private dataSubjectSpline = new BehaviorSubject<Array<SplineData>>([]);
   private dataSubjectDate = new BehaviorSubject<Array<SplineData>>([]);
   private dataSubjectMonth = new BehaviorSubject<Array<SplineData>>([]);
-  private dataSubjectNow = new BehaviorSubject<Array<ElecData>>([]);
+  private dataSubjectNow = new BehaviorSubject<Array<AccumulationElec>>([]);
   $data = this.dataSubject.asObservable();
   $dataBar = this.dataSubjectBar.asObservable();
   $dataSpline = this.dataSubjectSpline.asObservable();
@@ -72,7 +73,7 @@ export class SignalRService {
     });
     this.hubConnection.on('transferdataHour',(hourData)=>{
       if(hourData.length!=this.splineTempLength){
-        console.log(hourData)
+        // console.log(hourData)
         this.dataSubjectSpline.next(hourData);
         // console.log('hourData= ',hourData)
         this.splineTempLength=hourData.length;
@@ -92,7 +93,7 @@ export class SignalRService {
       }
     });
     this.hubConnection.on('RefreshDashBoardData',(nowData)=>{
-      // console.log('nowData= ',nowData);
+      console.log('nowData= ',nowData);
       this.elecData=nowData;
       this.dataSubjectNow.next(nowData);
     });
