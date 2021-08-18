@@ -72,10 +72,7 @@ export class Spline1Component implements OnInit {
   }
     GetOnInit(){
       this.signalRService.$dataSpline.subscribe(x=>{
-        // 關閉loading畫面
-        if(x.length!=0){
-          this.signalRService.show=false
-        }
+
 
       this.today = new Date();
       this.options.subtitle.text ='最後更新時間:'+this.today.toLocaleString();
@@ -85,7 +82,8 @@ export class Spline1Component implements OnInit {
         this.signalRService.show=false
         // y是chartList z是hourdata
         // 如果chartList的name==hourData的name 則 push data
-        this.chartList.find(y=>y.name == z.name).data.push({x:Date.parse(z.time+'+00:00'),y:z.sum})
+        //每小時資料
+        this.chartList.find(y=>y.name == z.name)?.data.push({x:Date.parse(z.time+'+00:00'),y:z.sum*z.volt/1000})
       })
       // 取得今天0時作為x軸的起始點
       this.options.xAxis.min = Date.parse(new Date(this.today.getFullYear(),this.today.getMonth(),this.today.getDate(),0,0,0).toString()+'+00:00');

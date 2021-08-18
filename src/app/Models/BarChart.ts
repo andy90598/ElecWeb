@@ -21,7 +21,7 @@ export class BarChart{
           enabled: true,
           format: '{y} 瓦',
           style: {
-            fontSize:'24px'
+            fontSize:'18px'
           }
         },
       }
@@ -37,8 +37,12 @@ export class BarChart{
         text: '瓦'
       }
     },
+    tooltip:{
+      pointFormat:'{series.name}: <b>{point.y:.0f}瓦</b>'
+    },
     series: [
       {
+        name:"消耗",
         type:"bar",
         data:[1,2],
       }

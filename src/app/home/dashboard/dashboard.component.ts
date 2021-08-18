@@ -45,6 +45,7 @@ export class DashboardComponent implements OnInit{
     // 一開始近來顯示loading
     this.signalRService.show=true;
     this.signalRService.$dataNow.subscribe(x=>{
+      console.log('AAA')
       let elecDeviceList=new Array();
       // 讓elecDataList = 訂閱收到的值
       this.elecDataList=x
