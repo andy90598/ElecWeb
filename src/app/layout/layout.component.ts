@@ -23,9 +23,9 @@ export class LayoutComponent implements OnInit {
   }
   Goto(path:string){
     this.router.navigate(['/home/'+path]);
-    if(path == 'dashboard'){
-      this.signalRService.RefreshDashBoardData();
-    }
+
+    this.signalRService.RefreshDashBoardData();
+
     this.path=path
   }
 }

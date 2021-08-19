@@ -21,9 +21,9 @@ export class SignalRService {
   private dataSubjectSpline = new BehaviorSubject<Array<SplineData>>([]);
   private dataSubjectMonth = new BehaviorSubject<Array<SplineData>>([]);
   private dataSubjectNow = new Subject<Array<AccumulationElec>>();
-  private dataSubjectName = new Subject<Array<String>>();
 
-  $deviceNameList = this.dataSubjectName.asObservable();
+  public DeviceNameList = new Array<string>();
+
   $dataBar = this.dataSubjectBar.asObservable();
   $dataSpline = this.dataSubjectSpline.asObservable();
   $dataMonth = this.dataSubjectMonth.asObservable();
@@ -33,9 +33,6 @@ export class SignalRService {
   splineTempLength=0;
   monthTempLength=0;
 
-  constructor(
-    private homeService:HomeService
-  ){}
   public StartConnection=()=>{
   this.monthTempLength=0
   this.splineTempLength=0
@@ -98,7 +95,7 @@ export class SignalRService {
     });
 
     this.hubConnection.on('SendDeviceNameList',(deviceNameList)=>{
-      this.homeService.deviceNameList=deviceNameList;
+      this.DeviceNameList=deviceNameList;
     });
   }
 

@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ChartComponent implements OnInit {
   constructor(
-
+    private signalRService:SignalRService
   ) { }
   ngOnInit(): void {
   }
@@ -16,6 +16,7 @@ export class ChartComponent implements OnInit {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
     console.log('BBB')
+    this.signalRService.show=false
   }
 }
 

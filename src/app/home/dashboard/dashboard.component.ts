@@ -45,7 +45,8 @@ export class DashboardComponent implements OnInit{
 
   ngOnInit(): void {
     // 一開始近來顯示loading
-    setTimeout(()=>{this.signalRService.show=true;},0);
+    // setTimeout(()=>{this.signalRService.show=true;},0);
+    this.signalRService.show=true;
     this.subscription.add(
       this.signalRService.$dataNow.subscribe(x=>{
         if(x.length!=0){
@@ -67,11 +68,14 @@ export class DashboardComponent implements OnInit{
 
         //長條圖
         const accumulationElecList =new Array
-
+        const deviceNameList = new Array
         x.forEach(y=>{
+          deviceNameList.push(y.name);
+
           accumulationElecList.push(Math.round(y.value*y.volt))
         })
-        this.barChart.chartOptions.series[0].data=accumulationElecList ;
+        this.barChart.chartOptions.series[0].data=accumulationElecList;
+        this.barChart.chartOptions.xAxis.categories=deviceNameList;
         this.barChart.chartOptions.subtitle.text="最後更新時間: "+new Date().toLocaleString();
         this.updateFlag=true;
       })

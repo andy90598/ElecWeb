@@ -2,6 +2,7 @@ import { HomeService } from './../../home.service';
 import { Component, OnInit } from '@angular/core';
 import * as Highcharts from 'highcharts';
 import { SignalRService } from 'src/app/services/signal-r.service';
+import { Chart } from 'angular-highcharts';
 
 @Component({
   selector: 'app-spline2',
@@ -9,8 +10,8 @@ import { SignalRService } from 'src/app/services/signal-r.service';
   styleUrls: ['./spline2.component.css']
 })
 export class Spline2Component implements OnInit {
-  highchart = Highcharts;
-  options={
+  chart = new Chart;
+  options:Highcharts.Options={
     chart: {
       type: 'column'
     },
@@ -80,7 +81,6 @@ export class Spline2Component implements OnInit {
   chartList = new Array();
   //做資料處理用
   chartList2 = new Array();
-  updateFlag=false;
 
 
   constructor(
@@ -95,26 +95,28 @@ export class Spline2Component implements OnInit {
   GetOnInit(){
     this.signalRService.$dataMonth.subscribe(x=>{
       // console.log(x)
+      //創一個空的符合格式的 Array 給 option 的 series 用
       this.CreatDataList()
-
-      this.updateFlag=true
+      // 把資料塞到創好的Array裡
       x.forEach((y)=>{
-
         this.chartList.find(z=>z.name==y.name).data[y.time-1]=(Math.round((y.sum*110/1000*24)*1000)/1000)*y.dayCount;
       });
+      // 把Array塞到 options 的 series裡
       this.options.series=this.chartList;
-      // console.log('每月資料  ', this.options.series)
+
+      //把options塞到chart
+      this.chart=new Chart(this.options)
+      //然後更新
+      this.chart.ref?.update(this.options,true)
+      console.log('每月資料  ', x)
     })
   }
 
-  // 創陣列符合bar圖表 series的格式 {name:this.nameList[i],data:[]}
-  // data之後再GetOnIt塞
   CreatDataList(){
     this.chartList = new Array();
-    for (let i=0;i<this.homeService.deviceNameList.length;i++){
+    for (let i=0;i<this.signalRService.DeviceNameList.length;i++){
       // data=創一個長度為12且填滿0的Array
-      this.chartList.push({name:this.homeService.deviceNameList[i],data:new Array(12).fill(0)})
-      // this.chartList2.push({deviceId:this.homeService.deviceIDList[i],name:this.homeService.deviceNameList[i],data:new Array(12).fill(0)})
+      this.chartList.push({name:this.signalRService.DeviceNameList[i],data:new Array(12).fill(0)})
     }
     // console.log('預設= ',this.chartList)
   }
