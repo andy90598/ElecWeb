@@ -5,6 +5,7 @@
       <ng-container *ngFor="let item of elecDataList ;let i =index">
         <div class="col-xs-6 col-sm-4 placeholder">
           <radial-gauge
+            [attr.Value]="(item.value*item.volt/1000)"
 
             title="Watt"
             units="Kw"
@@ -40,7 +41,6 @@
                         {"from": 0.6, "to": 0.9, "color": "#aaa"},
                         {"from": 0.9, "to": 1.2, "color": "#eea"},
                         {"from": 1.2, "to": 1.5, "color": "#eaa"}]'
-            [attr.Value]="(item.value*item.volt/1000)"
           ></radial-gauge>
           <h4>
             {{item.uuid}}<br>

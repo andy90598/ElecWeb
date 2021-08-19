@@ -89,34 +89,33 @@ export class Spline2Component implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.CreatDataList()
     this.GetOnInit()
   }
 
   GetOnInit(){
     this.signalRService.$dataMonth.subscribe(x=>{
       // console.log(x)
+      this.CreatDataList()
+
       this.updateFlag=true
-      x.forEach((x)=>{
-        this.chartList2.forEach((y,index)=>{
-          if (y.deviceId==x.uuid){
-            // 電流*電壓/1000變成千瓦  然後*當月用電天數
-            this.chartList[index].data[x.time-1]=(Math.round((x.sum*110/1000)*1000)/1000)*x.dayCount
-          }
-        })
+      x.forEach((y)=>{
+
+        this.chartList.find(z=>z.name==y.name).data[y.time-1]=(Math.round((y.sum*110/1000*24)*1000)/1000)*y.dayCount;
       });
       this.options.series=this.chartList;
-      // console.log('this.options.series=  ', this.options.series)
+      // console.log('每月資料  ', this.options.series)
     })
   }
 
   // 創陣列符合bar圖表 series的格式 {name:this.nameList[i],data:[]}
   // data之後再GetOnIt塞
   CreatDataList(){
+    this.chartList = new Array();
     for (let i=0;i<this.homeService.deviceNameList.length;i++){
       // data=創一個長度為12且填滿0的Array
       this.chartList.push({name:this.homeService.deviceNameList[i],data:new Array(12).fill(0)})
-      this.chartList2.push({deviceId:this.homeService.deviceIDList[i],name:this.homeService.deviceNameList[i],data:new Array(12).fill(0)})
+      // this.chartList2.push({deviceId:this.homeService.deviceIDList[i],name:this.homeService.deviceNameList[i],data:new Array(12).fill(0)})
     }
+    // console.log('預設= ',this.chartList)
   }
 }

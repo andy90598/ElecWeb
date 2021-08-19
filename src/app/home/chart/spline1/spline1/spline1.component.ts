@@ -1,3 +1,5 @@
+import { Subscription } from 'rxjs';
+import { SplineData } from './../../../../Models/SpLineData';
 import { HomeService } from './../../../home.service';
 import { Component, OnInit } from '@angular/core';
 import * as Highcharts from 'highcharts';
@@ -54,51 +56,59 @@ export class Spline1Component implements OnInit {
     series: []
   } as any
 
+  //宣告一個名為subscription的變數 型別是Subscription = new Subscription()
+  private subscription:Subscription =new Subscription();
+
   updateFlag=false;
   //最後塞到series data的是這個
   chartList = new Array();
   today = new Date();
-
   constructor(
     public signalRService:SignalRService,
     public homeService:HomeService
-  ) {
-  }
+  ) {}
 
-   ngOnInit(): void {
-    this.signalRService.show=true;
-    this.CreatDataList();
+  ngOnInit(): void {
     this.GetOnInit();
   }
-    GetOnInit(){
+  GetOnInit(){
+    setTimeout(()=>{this.signalRService.show=true;},0);
+    this.subscription.add(
       this.signalRService.$dataSpline.subscribe(x=>{
-
-
-      this.today = new Date();
-      this.options.subtitle.text ='最後更新時間:'+this.today.toLocaleString();
-      // 如果(資料筆數 % 設備數量==0) 才更新，因為每個溝表時間不同 每個整點要等資料齊全才能塞到圖表
-
-      x.forEach((z,index)=>{
-        this.signalRService.show=false
-        // y是chartList z是hourdata
-        // 如果chartList的name==hourData的name 則 push data
-        //每小時資料
-        this.chartList.find(y=>y.name == z.name)?.data.push({x:Date.parse(z.time+'+00:00'),y:z.sum*z.volt/1000})
+        if(x.length!=0){
+          this.signalRService.show=false;
+        }
+        this.CreatDataList();
+        this.today = new Date();
+        this.options.subtitle.text ='最後更新時間:'+this.today.toLocaleString();
+        // 取得今天0時作為x軸的起始點
+        this.options.xAxis.min = Date.parse(new Date(this.today.getFullYear(),this.today.getMonth(),this.today.getDate(),0,0,0).toString()+'+00:00');
+        x.forEach((z)=>{
+          // y是chartList z是hourdata
+          // 如果chartList的name==hourData的name 則 push data
+          //每小時資料
+          if(x.length>0){
+            this.chartList.find(y=>y.name == z.name)?.data.push({x:Date.parse(z.time+'+00:00'),y:z.sum*z.volt/1000});
+          }
+        })
+        // 塞data到series的data
+        this.options.series=this.chartList;
+        // console.log('今日每小時資料 ',this.chartList)
+        //更新圖表的series
+        this.updateFlag=true;
       })
-      // 取得今天0時作為x軸的起始點
-      this.options.xAxis.min = Date.parse(new Date(this.today.getFullYear(),this.today.getMonth(),this.today.getDate(),0,0,0).toString()+'+00:00');
-      // 塞data到series的data
-      this.options.series=this.chartList;
-      //更新圖表的series
-      this.updateFlag=true;
-    })
+    );
   }
   // 創陣列符合spline圖表 series的格式 {type:'spline',name:this.nameList[i],data:[]}
   // data之後再GetOnIt塞
   CreatDataList(){
+    this.chartList=new Array();
     for(let i=0;i<this.homeService.deviceNameList.length;i++){
       this.chartList.push({type:'spline',name:this.homeService.deviceNameList[i],data:[]});
     }
   }
-
+  ngOnDestroy(): void {
+    //取消訂閱
+    this.subscription.unsubscribe();
+  }
 }
