@@ -13,9 +13,6 @@ export class ChartComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
-    //Called once, before the instance is destroyed.
-    //Add 'implements OnDestroy' to the class.
-    console.log('BBB')
     this.signalRService.show=false
   }
 }

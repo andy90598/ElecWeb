@@ -88,7 +88,6 @@ export class DashboardComponent implements OnInit{
     //訂閱 signalRService的 $data 當$data變動時收到資料
     this.subscription.add(
       this.signalRService.$dataBar.subscribe(x=>{
-        console.log('AAAA')
         // 設備名稱跟值的表
         let elecDeviceList=new Array();
         // 讓elecDataList = 訂閱收到的值
