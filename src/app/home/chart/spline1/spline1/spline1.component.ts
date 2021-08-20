@@ -12,7 +12,7 @@ import { Chart } from 'angular-highcharts';
   styleUrls: ['./spline1.component.css']
 })
 export class Spline1Component implements OnInit {
-  chart!:Chart;
+
   chartList = new Array();
   options ={
     chart: {
@@ -56,7 +56,7 @@ export class Spline1Component implements OnInit {
     },
     series: []
   } as any
-
+  chart=new Chart(this.options);
   //宣告一個名為subscription的變數 型別是Subscription = new Subscription()
   private subscription:Subscription =new Subscription();
 

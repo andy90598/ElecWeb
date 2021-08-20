@@ -49,9 +49,8 @@
           </h4>
         </div>
       </ng-container>
-
     </div>
-    <h2>
+    <!-- <h2>
       用電比例
     </h2>
     <hr>
@@ -76,8 +75,15 @@
           [oneToOne]="true"
           class="col-lg- col-md-8">
       </highcharts-chart>
+    </div> -->
+
+    <h2>
+      測試
+    </h2>
+    <hr>
+    <div class="row">
+      <div [chart]="chartForPie" class="col-4"></div>
+      <div [chart]="chartForBar" class="col-8"></div>
     </div>
-
-
 </div>
 
