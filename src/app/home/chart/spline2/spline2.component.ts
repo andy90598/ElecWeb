@@ -16,7 +16,10 @@ export class Spline2Component implements OnInit {
       type: 'column'
     },
     title: {
-        text: '每月用電量'
+        text: '每月用電量',
+        style:{
+          fontSize:'24px'
+        }
     },
     // subtitle: {
     //     text: 'Source: WorldClimate.com'
@@ -108,7 +111,7 @@ export class Spline2Component implements OnInit {
       this.chart=new Chart(this.options)
       //然後更新
       this.chart.ref?.update(this.options,true)
-      console.log('每月資料  ', x)
+      // console.log('每月資料  ', x)
     })
   }
 

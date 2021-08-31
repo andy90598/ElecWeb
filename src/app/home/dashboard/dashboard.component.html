@@ -3,7 +3,7 @@
     <hr>
     <div class="row placeholders text-center mb-3" style="margin-right: 0px; margin-left: 0px; margin-top: 0px;">
       <ng-container *ngFor="let item of elecDataList ;let i =index">
-        <div class="col-xs-6 col-sm-4 placeholder">
+        <div class="col-xs-6 col-sm-3 placeholder">
           <radial-gauge
             [attr.Value]="(item.value*item.volt/1000)"
 

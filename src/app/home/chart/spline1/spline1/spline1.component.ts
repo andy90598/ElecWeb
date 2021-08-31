@@ -1,8 +1,6 @@
 import { Subscription } from 'rxjs';
-import { SplineData } from './../../../../Models/SpLineData';
 import { HomeService } from './../../../home.service';
 import { Component, OnInit } from '@angular/core';
-import * as Highcharts from 'highcharts';
 import { SignalRService } from 'src/app/services/signal-r.service';
 import { Chart } from 'angular-highcharts';
 
@@ -20,7 +18,10 @@ export class Spline1Component implements OnInit {
       marginRight: 10,
     },
     title: {
-      text: '今日每小時用電量'
+      text: '今日每小時用電量',
+      style:{
+        fontSize:'24px'
+      }
     },
     subtitle:{
       text: ''
@@ -100,7 +101,7 @@ export class Spline1Component implements OnInit {
         // 塞data到series的data
         this.options.series=this.chartList;
         let chart = new Chart(this.options);
-        console.log('今日每小時資料 ',this.chartList)
+        // console.log('今日每小時資料 ',this.chartList)
         //更新圖表的series
         // this.updateFlag=true;
         this.chart = chart;

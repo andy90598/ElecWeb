@@ -89,7 +89,7 @@ export class SignalRService {
     });
 
     this.hubConnection.on('RefreshDashBoardData',(nowData)=>{
-      console.log('nowData= ',nowData);
+      // console.log('nowData= ',nowData);
       this.elecData=nowData;
       this.dataSubjectNow.next(nowData);
     });
