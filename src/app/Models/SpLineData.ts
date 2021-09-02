@@ -5,5 +5,4 @@ export class SplineData{
   public dayCount=0
   public name= ""
   public volt= 0
-
 }

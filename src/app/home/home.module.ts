@@ -9,6 +9,7 @@ import { ChartModule } from 'angular-highcharts';
 import { HighchartsChartModule } from 'highcharts-angular';
 import { Spline1Component } from './chart/spline1/spline1/spline1.component';
 import { Spline2Component } from './chart/spline2/spline2.component';
+import { SearchComponent } from './search/search.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { Spline2Component } from './chart/spline2/spline2.component';
     ChartComponent,
     Spline1Component,
     Spline2Component,
+    SearchComponent,
   ],
   imports: [
     CommonModule,
