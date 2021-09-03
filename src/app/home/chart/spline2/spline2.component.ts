@@ -97,12 +97,13 @@ export class Spline2Component implements OnInit {
 
   GetOnInit(){
     this.signalRService.$dataMonth.subscribe(x=>{
+
       // console.log(x)
       //創一個空的符合格式的 Array 給 option 的 series 用
-      this.CreatDataList()
+      this.CreatDataList();
       // 把資料塞到創好的Array裡
       x.forEach((y)=>{
-        this.chartList.find(z=>z.name==y.name).data[y.time-1]=(Math.round((y.sum*110/1000*24)*1000)/1000)*y.dayCount;
+        this.chartList.find(z=>z.name==y.name).data[y.time-1]=(Math.round((y.sum*y.volt/1000*24)*1000)/1000)*y.dayCount;
       });
       // 把Array塞到 options 的 series裡
       this.options.series=this.chartList;
@@ -119,7 +120,7 @@ export class Spline2Component implements OnInit {
     this.chartList = new Array();
     for (let i=0;i<this.signalRService.DeviceNameList.length;i++){
       // data=創一個長度為12且填滿0的Array
-      this.chartList.push({name:this.signalRService.DeviceNameList[i],data:new Array(12).fill(0)})
+      this.chartList.push({name:this.signalRService.DeviceNameList[i].name,data:new Array(12).fill(0)})
     }
     // console.log('預設= ',this.chartList)
   }

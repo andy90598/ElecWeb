@@ -1,4 +1,3 @@
-import { HomeService } from './../home/home.service';
 import { SplineData } from './../Models/SpLineData';
 import { AccumulationElec } from './../Models/AccumulationElec';
 import { Injectable } from '@angular/core';
@@ -6,6 +5,10 @@ import * as signalR from '@microsoft/signalr'
 import { environment } from 'src/environments/environment';
 import { BehaviorSubject, ReplaySubject, Subject } from 'rxjs';
 
+export class Device{
+  id:string ="";
+  name:string="";
+}
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +25,7 @@ export class SignalRService {
   private dataSubjectMonth = new BehaviorSubject<Array<SplineData>>([]);
   private dataSubjectNow = new Subject<Array<AccumulationElec>>();
 
-  public DeviceNameList = new Array<string>();
+  public DeviceNameList = new Array<Device>();
 
   $dataBar = this.dataSubjectBar.asObservable();
   $dataSpline = this.dataSubjectSpline.asObservable();
@@ -71,21 +74,21 @@ export class SignalRService {
 
     this.hubConnection.on('transferdataHour',(hourData)=>{
       // 每次資料長度有異動時 = 有增加新的值 再推送到圖表
-      if(hourData.length!=this.splineTempLength){
+      // if(hourData.length!=this.splineTempLength){
         this.dataSubjectSpline.next(hourData);
         this.splineTempLength=hourData.length;
-      }
+      // }
       // console.log('hourData= ',hourData)
     });
 
     this.hubConnection.on('transferdataMonth',(monthData)=>{
       // 每次資料長度有異動時 = 有增加新的值 再推送到圖表
-      if(monthData.length!=this.monthTempLength){
+      // if(monthData.length!=this.monthTempLength){
         // console.log(monthData)
         this.dataSubjectMonth.next(monthData);
         // console.log('monthData= ',monthData);
         this.monthTempLength=monthData.length;
-      }
+      // }
     });
 
     this.hubConnection.on('RefreshDashBoardData',(nowData)=>{
@@ -96,6 +99,7 @@ export class SignalRService {
 
     this.hubConnection.on('SendDeviceNameList',(deviceNameList)=>{
       this.DeviceNameList=deviceNameList;
+      // console.log (deviceNameList);
     });
   }
 

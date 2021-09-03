@@ -114,7 +114,7 @@ export class Spline1Component implements OnInit {
   CreatDataList(){
     this.chartList=new Array();
     for(let i=0;i<this.signalRService.DeviceNameList.length;i++){
-      this.chartList.push({type:'spline',name:this.signalRService.DeviceNameList[i],data:[]});
+      this.chartList.push({type:'spline',name:this.signalRService.DeviceNameList[i].name,data:[]});
     }
   }
   ngOnDestroy(): void {

@@ -10,6 +10,9 @@ import { HighchartsChartModule } from 'highcharts-angular';
 import { Spline1Component } from './chart/spline1/spline1/spline1.component';
 import { Spline2Component } from './chart/spline2/spline2.component';
 import { SearchComponent } from './search/search.component';
+import { FormsModule,ReactiveFormsModule } from '@angular/forms';
+import { NgbModule,NgbDate } from '@ng-bootstrap/ng-bootstrap';
+
 
 @NgModule({
   declarations: [
@@ -24,7 +27,11 @@ import { SearchComponent } from './search/search.component';
     HomeRoutingModule,
     GaugesModule,
     ChartModule,
-    HighchartsChartModule
+    HighchartsChartModule,
+    FormsModule,
+    ReactiveFormsModule,
+    NgbModule,
+    // NgbDate
   ],
   providers:[PieDataService],
   schemas:[CUSTOM_ELEMENTS_SCHEMA]

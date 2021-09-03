@@ -61,7 +61,15 @@ export class DashboardComponent implements OnInit {
         // 跑回圈 把elecDevice塞到elecDeviceList <name|value>
         this.elecDataList.forEach((x, index) => {
           const elecDevice = new Array<string | number>();
-          elecDevice[0] = x.name;
+          if (x.name != null)
+          {
+            elecDevice[0] = x.name;
+          } else
+          {
+            elecDevice[0] = '';
+          }
+
+
           elecDevice[1] = x.value*x.volt;
           elecDeviceList.push(elecDevice)
         })

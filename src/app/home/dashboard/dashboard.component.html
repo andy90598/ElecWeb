@@ -3,51 +3,53 @@
     <hr>
     <div class="row placeholders text-center mb-3" style="margin-right: 0px; margin-left: 0px; margin-top: 0px;">
       <ng-container *ngFor="let item of elecDataList ;let i =index">
-        <div class="col-xs-6 col-sm-3 placeholder">
-          <radial-gauge
-            [attr.Value]="(item.value*item.volt/1000)"
+        <ng-container *ngIf="item.name">
+          <div class="col-xs-6 col-sm-3 placeholder">
+            <radial-gauge
+              [attr.Value]="(item.value*item.volt/1000)"
 
-            title="Watt"
-            units="Kw"
-            width="200"
-            height="200"
+              title="Watt"
+              units="Kw"
+              width="200"
+              height="200"
 
-            min-value="0.0"
-            max-value="1.5"
-            major-ticks="0.0,0.3,0.6,0.9,0.12,0.15"
-            minor-ticks="2"
+              min-value="0.0"
+              max-value="1.5"
+              major-ticks="0.0,0.3,0.6,0.9,0.12,0.15"
+              minor-ticks="2"
 
-            needle-type="arrow"
-            needle-width="2"
-            needle-colors="blue"
-            needle-circle-inner="false"
-            needle-circle-size="7"
-            needle-circle-outer="true"
+              needle-type="arrow"
+              needle-width="2"
+              needle-colors="blue"
+              needle-circle-inner="false"
+              needle-circle-size="7"
+              needle-circle-outer="true"
 
-            color-needle="red"
-            color-needle-end="blue"
-            color-needle-shadow-down="#550"
-            color-needle-circle-outer="#333"
-            color-needle-circle-outer-end="#111"
+              color-needle="red"
+              color-needle-end="blue"
+              color-needle-shadow-down="#550"
+              color-needle-circle-outer="#333"
+              color-needle-circle-outer-end="#111"
 
-            animation="true"
-            animateOnInit="true"
-            animated-Value="true"
-            animation-duration="900"
-            animation-rule="linear"
-            glow="true"
-            highlights='[{"from": 0.0, "to": 0.3, "color": "#eee"},
-                        {"from": 0.3, "to": 0.6, "color": "#ccc"},
-                        {"from": 0.6, "to": 0.9, "color": "#aaa"},
-                        {"from": 0.9, "to": 1.2, "color": "#eea"},
-                        {"from": 1.2, "to": 1.5, "color": "#eaa"}]'
-          ></radial-gauge>
-          <h4>
-            {{item.uuid}}<br>
-            {{signalRService.DeviceNameList[i]}}功率<br>
-            電流: {{item.value}}A
-          </h4>
-        </div>
+              animation="true"
+              animateOnInit="true"
+              animated-Value="true"
+              animation-duration="900"
+              animation-rule="linear"
+              glow="true"
+              highlights='[{"from": 0.0, "to": 0.3, "color": "#eee"},
+                          {"from": 0.3, "to": 0.6, "color": "#ccc"},
+                          {"from": 0.6, "to": 0.9, "color": "#aaa"},
+                          {"from": 0.9, "to": 1.2, "color": "#eea"},
+                          {"from": 1.2, "to": 1.5, "color": "#eaa"}]'
+            ></radial-gauge>
+            <h4>
+              {{item.uuid}}<br>
+              {{signalRService.DeviceNameList[i]?.name}}功率<br>
+              電流: {{item.value}}A
+            </h4>
+          </div>
+        </ng-container>
       </ng-container>
     </div>
     <!-- <h2>

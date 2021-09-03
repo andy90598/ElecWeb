@@ -7,7 +7,7 @@ import { catchError } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class HttpService {
-
+  apiUrl = 'http://localhost:5001/api'
   constructor(
     private http:HttpClient,
     private messageService:MessageService
@@ -16,7 +16,7 @@ export class HttpService {
     this.messageService.add(`HeroService: ${message}`);
   }
   get(api:string):Observable<any>{
-    return this.http.get<any>(api)
+    return this.http.get<any>(this.apiUrl+api)
       .pipe(
         catchError(this.handleError<any>(`HttpGet [${api}] API`))
       )
