@@ -16,9 +16,9 @@ export class HttpService {
     this.messageService.add(`HeroService: ${message}`);
   }
   get(api:string):Observable<any>{
-    return this.http.get<any>(this.apiUrl+api)
+    return this.http.get<any>(this.apiUrl+api,{observe:'response'})
       .pipe(
-        catchError(this.handleError<any>(`HttpGet [${api}] API`))
+        catchError(this.handleError<any>(`HttpGet [${api}] API`,[]))
       )
   }
 
@@ -32,7 +32,7 @@ export class HttpService {
       this.log(`${operation} failed: ${error.message}`);
 
       // Let the app keep running by returning an empty result.
-      return of(result as T);
+      return of(error as T);
     };
   }
 }
