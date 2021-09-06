@@ -24,6 +24,7 @@ export class SignalRService {
   private dataSubjectSpline = new BehaviorSubject<Array<SplineData>>([]);
   private dataSubjectMonth = new BehaviorSubject<Array<SplineData>>([]);
   private dataSubjectNow = new Subject<Array<AccumulationElec>>();
+  private dataSubjectNameList = new Subject<Array<{id:string,name:string}>>();
 
   public DeviceNameList = new Array<Device>();
 
@@ -31,6 +32,7 @@ export class SignalRService {
   $dataSpline = this.dataSubjectSpline.asObservable();
   $dataMonth = this.dataSubjectMonth.asObservable();
   $dataNow = this.dataSubjectNow.asObservable();
+  $dataNameList = this.dataSubjectNameList.asObservable();
 
   show=true;
   splineTempLength=0;
@@ -66,28 +68,23 @@ export class SignalRService {
   }
 
   public addTransferBroadcastDataListener =()=>{
-
+    // this.show=false;
     this.hubConnection.on('transferdataBar',(barData)=>{
       // console.log('barData= ',barData);
       this.dataSubjectBar.next(barData);
     });
 
     this.hubConnection.on('transferdataHour',(hourData)=>{
-      // 每次資料長度有異動時 = 有增加新的值 再推送到圖表
-      // if(hourData.length!=this.splineTempLength){
-        this.dataSubjectSpline.next(hourData);
-        this.splineTempLength=hourData.length;
-      // }
+      this.splineTempLength = hourData.length
+      this.dataSubjectSpline.next(hourData);
       // console.log('hourData= ',hourData)
     });
 
     this.hubConnection.on('transferdataMonth',(monthData)=>{
-      // 每次資料長度有異動時 = 有增加新的值 再推送到圖表
-      // if(monthData.length!=this.monthTempLength){
-        // console.log(monthData)
-        this.dataSubjectMonth.next(monthData);
-        // console.log('monthData= ',monthData);
+
         this.monthTempLength=monthData.length;
+        this.dataSubjectMonth.next(monthData);
+
       // }
     });
 
@@ -98,6 +95,7 @@ export class SignalRService {
     });
 
     this.hubConnection.on('SendDeviceNameList',(deviceNameList)=>{
+      this.dataSubjectNameList.next(deviceNameList);
       this.DeviceNameList=deviceNameList;
       // console.log (deviceNameList);
     });

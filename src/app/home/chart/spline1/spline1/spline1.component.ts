@@ -12,7 +12,8 @@ import { Chart } from 'angular-highcharts';
 export class Spline1Component implements OnInit {
 
   chartList = new Array();
-  options ={
+
+  options={
     chart: {
       type: 'spline',
       marginRight: 10,
@@ -37,7 +38,6 @@ export class Spline1Component implements OnInit {
             enabled: true
         }
       }
-
     },
     xAxis: {
       title: {
@@ -55,9 +55,11 @@ export class Spline1Component implements OnInit {
     legend: {
       enabled: true,
     },
-    series: []
-  } as any
-  chart=new Chart(this.options);
+    series:[
+
+    ]
+  }as any
+  chart=new Chart();
   //宣告一個名為subscription的變數 型別是Subscription = new Subscription()
   private subscription:Subscription =new Subscription();
 
@@ -65,22 +67,27 @@ export class Spline1Component implements OnInit {
   constructor(
     public signalRService:SignalRService,
     public homeService:HomeService
-  ) {}
+  ) {
+    this.chart=new Chart(this.options)
+  }
 
   ngOnInit(): void {
+    // this.CreatDataList();
     this.GetInit();
   }
   GetInit(){
-
     // setTimeout(()=>{this.signalRService.show=true;},0);
     this.signalRService.show=true;
+
     this.subscription.add(
       this.signalRService.$dataSpline.subscribe(x=>{
-        if(x.length!=0){
+        this.CreatDataList()
+        console.log(x)
+        if(this.signalRService.splineTempLength>0){
           this.signalRService.show=false;
         }
-        this.CreatDataList();
         this.today = new Date();
+
         this.options.subtitle.text='最後更新時間:'+this.today.toLocaleString()
         // 取得今天0時作為x軸的起始點
 
@@ -99,13 +106,11 @@ export class Spline1Component implements OnInit {
           }
         })
         // 塞data到series的data
-        this.options.series=this.chartList;
-        let chart = new Chart(this.options);
-        // console.log('今日每小時資料 ',this.chartList)
-        //更新圖表的series
-        // this.updateFlag=true;
-        this.chart = chart;
-        this.chart.ref?.update(this.options.series,true)
+        console.log('list = ',this.chartList)
+        this.options.series=JSON.parse(JSON.stringify(this.chartList));
+        // this.chart = new Chart(this.options);
+        this.chart.ref?.update(this.options,true,true,true);
+        // console.log(this.chart.ref?.series);
       })
     );
   }
@@ -113,9 +118,10 @@ export class Spline1Component implements OnInit {
   // data之後再GetOnIt塞
   CreatDataList(){
     this.chartList=new Array();
-    for(let i=0;i<this.signalRService.DeviceNameList.length;i++){
-      this.chartList.push({type:'spline',name:this.signalRService.DeviceNameList[i].name,data:[]});
-    }
+      for(let i=0;i<this.signalRService.DeviceNameList.length;i++){
+        this.chartList.push({type:'spline',name:this.signalRService.DeviceNameList[i].name,data:[]});
+      }
+    // console.log(this.chartList)
   }
   ngOnDestroy(): void {
     //取消訂閱

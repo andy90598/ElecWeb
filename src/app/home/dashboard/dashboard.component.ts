@@ -51,7 +51,7 @@ export class DashboardComponent implements OnInit {
     this.signalRService.show = true;
     this.subscription.add(
       this.signalRService.$dataNow.subscribe(x => {
-        if (x.length != 0) {
+        if (x.length > 0) {
           //有資料後把loading關閉
           this.signalRService.show = false;
         }
@@ -89,6 +89,7 @@ export class DashboardComponent implements OnInit {
         this.barChart.chartOptions.xAxis.categories = deviceNameList;
         this.barChart.chartOptions.subtitle.text = "最後更新時間: " + new Date().toLocaleString();
         this.chartForBar.ref?.update(this.barChart.chartOptions);
+        // console.log(this.chartForBar,'<===bar')
         this.updateFlag = true;
       })
     );
@@ -130,7 +131,7 @@ export class DashboardComponent implements OnInit {
         this.barChart.chartOptions.xAxis.categories = deviceNameList;
         this.barChart.chartOptions.subtitle.text = "最後更新時間: " + new Date().toLocaleString();
         this.chartForBar.ref?.update(this.barChart.chartOptions);
-        this.updateFlag = true;
+        // this.updateFlag = true;
       })
     );
   }

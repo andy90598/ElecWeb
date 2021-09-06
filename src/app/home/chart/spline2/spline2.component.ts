@@ -10,7 +10,7 @@ import { Chart } from 'angular-highcharts';
   styleUrls: ['./spline2.component.css']
 })
 export class Spline2Component implements OnInit {
-  chart = new Chart;
+
   options:Highcharts.Options={
     chart: {
       type: 'column'
@@ -80,6 +80,7 @@ export class Spline2Component implements OnInit {
       }
     ]
   }  as any
+  chart = new Chart(this.options);
   //最後塞到data的是這個
   chartList = new Array();
   //做資料處理用
@@ -109,9 +110,9 @@ export class Spline2Component implements OnInit {
       this.options.series=this.chartList;
 
       //把options塞到chart
-      this.chart=new Chart(this.options)
+      // this.chart=new Chart(this.options)
       //然後更新
-      this.chart.ref?.update(this.options,true)
+      this.chart.ref?.update(this.options,true,true,true)
       // console.log('每月資料  ', x)
     })
   }

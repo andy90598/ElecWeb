@@ -19,6 +19,7 @@ export class SearchComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    // setInterval(()=>this.signalRService.show=false,0);
     this.signalRService.show=false;
     this.signalRService.DeviceNameList;
     this.selectForm = this.fb.group({
@@ -75,6 +76,7 @@ export class SearchComponent implements OnInit {
 
   Reset(){
     this.submitted = false;
+    this.searchData.length=0;
     this.selectForm.reset(
       this.selectForm=this.fb.group({
         id:[""],

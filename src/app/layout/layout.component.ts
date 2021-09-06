@@ -20,12 +20,12 @@ export class LayoutComponent implements OnInit {
     this.signalRService.StartConnection();
     //signalR事件監聽器
     this.signalRService.addTransferBroadcastDataListener();
+
   }
   Goto(path:string){
     this.router.navigate(['/home/'+path]);
-
     this.signalRService.RefreshDashBoardData();
-
+    this.signalRService.GetDeviceNameList();
     this.path=path
   }
 }
