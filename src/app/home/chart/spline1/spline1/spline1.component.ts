@@ -82,7 +82,7 @@ export class Spline1Component implements OnInit {
     this.subscription.add(
       this.signalRService.$dataSpline.subscribe(x=>{
         this.CreatDataList()
-        console.log(x)
+        // console.log(x)
         if(this.signalRService.splineTempLength>0){
           this.signalRService.show=false;
         }
@@ -106,7 +106,7 @@ export class Spline1Component implements OnInit {
           }
         })
         // 塞data到series的data
-        console.log('list = ',this.chartList)
+        // console.log('list = ',this.chartList)
         this.options.series=JSON.parse(JSON.stringify(this.chartList));
         // this.chart = new Chart(this.options);
         this.chart.ref?.update(this.options,true,true,true);

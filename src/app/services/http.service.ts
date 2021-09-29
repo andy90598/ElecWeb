@@ -7,7 +7,7 @@ import { catchError } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class HttpService {
-  apiUrl = 'http://localhost:5001/api'
+  apiUrl = 'http://192.168.140.211:5001/api'
   constructor(
     private http:HttpClient,
     private messageService:MessageService

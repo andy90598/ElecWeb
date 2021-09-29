@@ -1,4 +1,4 @@
-import { PieDataService } from './../services/pie-data.service';
+
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GaugesModule } from '@biacsics/ng-canvas-gauges';
@@ -33,7 +33,7 @@ import { NgbModule,NgbDate } from '@ng-bootstrap/ng-bootstrap';
     NgbModule,
     // NgbDate
   ],
-  providers:[PieDataService],
+  providers:[],
   schemas:[CUSTOM_ELEMENTS_SCHEMA]
 
 })

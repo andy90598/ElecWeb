@@ -25,7 +25,7 @@
   <div class="row">
     <!-- 左側navbar -->
     <div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark col-sm-2 col-lg-1 ">
-      <a href="" (click)="Goto('dashboard')" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+      <a [routerLink]="['/home/dashboard']" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
         <span class="fs-4" style="font-size: 1.5rem!important">
           目錄
         </span>
@@ -33,17 +33,17 @@
       <hr>
       <ul class="nav nav-pills flex-column mb-auto ">
         <li class="nav-item">
-          <a href="javascript:void(0);" (click)="Goto('dashboard')" [ngClass]="{'active':path=='dashboard'}" class="nav-link text-white">
+          <a [routerLink]="['/home/dashboard']" (click)="Goto()" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" class="nav-link text-white">
             面板
           </a>
         </li>
         <li class="nav-item">
-          <a href="javascript:void(0);" (click)="Goto('chart')" [ngClass]="{'active':path=='chart'}" class="nav-link text-white">
+          <a [routerLink]="['/home/chart']" (click)="Goto()" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" class="nav-link text-white">
             圖表
           </a>
         </li>
         <li class="nav-item">
-          <a href="javascript:void(0);" (click)="Goto('search')" [ngClass]="{'active':path=='search'}" class="nav-link text-white">
+          <a [routerLink]="['/home/search']" (click)="Goto()" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" class="nav-link text-white">
             查詢
           </a>
         </li>

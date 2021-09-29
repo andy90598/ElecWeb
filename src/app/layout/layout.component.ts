@@ -22,10 +22,8 @@ export class LayoutComponent implements OnInit {
     this.signalRService.addTransferBroadcastDataListener();
 
   }
-  Goto(path:string){
-    this.router.navigate(['/home/'+path]);
+  Goto(){
     this.signalRService.RefreshDashBoardData();
     this.signalRService.GetDeviceNameList();
-    this.path=path
   }
 }

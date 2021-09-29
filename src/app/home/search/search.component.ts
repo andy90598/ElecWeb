@@ -47,11 +47,11 @@ export class SearchComponent implements OnInit {
     let end = this.selectForm.get("end")?.value;
     let endDate = end.year+'-'+(end.month)+'-'+end.day;
     let url = '/Todo/'+id+'/'+startDate+'/'+endDate
-    console.log(url)
+    // console.log(url)
 
     //送出資料並取得資料
     this.httpService.get(url).subscribe(x=>{
-      console.log(x)
+      // console.log(x)
       if(x.status == 200){
         this.searchData = x.body;
       }else{
@@ -70,7 +70,7 @@ export class SearchComponent implements OnInit {
             invalid.push(name);
         }
     }
-    console.log(invalid)
+    // console.log(invalid)
     return invalid.length>0? invalid:[]
   }
 
