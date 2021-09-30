@@ -46,7 +46,7 @@ export class SearchComponent implements OnInit {
     // let startDate = new Date(start.year,start.month-1,start.day,0,0,0,0).toLocaleString();
     let end = this.selectForm.get("end")?.value;
     let endDate = end.year+'-'+(end.month)+'-'+end.day;
-    let url = '/Todo/'+id+'/'+startDate+'/'+endDate
+    let url = 'api/Todo/'+id+'/'+startDate+'/'+endDate
     // console.log(url)
 
     //送出資料並取得資料

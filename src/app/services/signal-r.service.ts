@@ -1,9 +1,9 @@
 import { SplineData } from './../Models/SpLineData';
 import { AccumulationElec } from './../Models/AccumulationElec';
-import { Injectable } from '@angular/core';
+import { ChangeDetectorRef, Injectable } from '@angular/core';
 import * as signalR from '@microsoft/signalr'
 import { environment } from 'src/environments/environment';
-import { BehaviorSubject, ReplaySubject, Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 
 export class Device{
   id:string ="";
@@ -68,10 +68,10 @@ export class SignalRService {
   }
 
   public addTransferBroadcastDataListener =()=>{
-    // this.show=false;
     this.hubConnection.on('transferdataBar',(barData)=>{
       // console.log('barData= ',barData);
       this.dataSubjectBar.next(barData);
+
     });
 
     this.hubConnection.on('transferdataHour',(hourData)=>{
@@ -81,10 +81,8 @@ export class SignalRService {
     });
 
     this.hubConnection.on('transferdataMonth',(monthData)=>{
-
         this.monthTempLength=monthData.length;
         this.dataSubjectMonth.next(monthData);
-
       // }
     });
 
@@ -92,6 +90,7 @@ export class SignalRService {
       // console.log('nowData= ',nowData);
       this.elecData=nowData;
       this.dataSubjectNow.next(nowData);
+      this.show=false;
     });
 
     this.hubConnection.on('SendDeviceNameList',(deviceNameList)=>{

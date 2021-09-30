@@ -1,6 +1,6 @@
 import { Subscription } from 'rxjs';
 import { HomeService } from './../../../home.service';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { SignalRService } from 'src/app/services/signal-r.service';
 import { Chart } from 'angular-highcharts';
 
@@ -66,7 +66,8 @@ export class Spline1Component implements OnInit {
   today = new Date();
   constructor(
     public signalRService:SignalRService,
-    public homeService:HomeService
+    public homeService:HomeService,
+    private cd:ChangeDetectorRef
   ) {
     this.chart=new Chart(this.options)
   }
@@ -85,6 +86,7 @@ export class Spline1Component implements OnInit {
         // console.log(x)
         if(this.signalRService.splineTempLength>0){
           this.signalRService.show=false;
+          this.cd.detectChanges()
         }
         this.today = new Date();
 
