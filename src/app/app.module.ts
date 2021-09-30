@@ -1,3 +1,4 @@
+import { HttpService } from './services/http.service';
 import { HttpClientModule } from '@angular/common/http';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -8,14 +9,16 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LayoutComponent } from './layout/layout.component';
 import { FormsModule  ,ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { SipnnerComponent } from './sipnner/sipnner.component';
+import { SpinnerComponent } from './spinner/spinner.component';
+import { httpInterceptProviders } from './http-interceptors';
+
 
 
 @NgModule({
   declarations: [
     AppComponent,
     LayoutComponent,
-    SipnnerComponent
+    SpinnerComponent,
   ],
   imports: [
     BrowserModule,
@@ -27,7 +30,7 @@ import { SipnnerComponent } from './sipnner/sipnner.component';
     NgbModule,
     TooltipModule.forRoot(),
   ],
-  providers: [],
+  providers: [httpInterceptProviders],
   bootstrap: [AppComponent],
   schemas:[CUSTOM_ELEMENTS_SCHEMA]
 })

@@ -2,7 +2,7 @@ import { AccumulationElec } from './../../Models/AccumulationElec';
 import { HomeService } from './../home.service';
 import { SignalRService } from './../../services/signal-r.service';
 import { DonutChart } from './../../Models/DonutChart';
-import {  Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {  ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ElecRowData } from 'src/app/Models/ElecRowData';
 import { BarChart } from 'src/app/Models/BarChart';
 import * as Highcharts from 'highcharts';
@@ -43,6 +43,7 @@ export class DashboardComponent implements OnInit {
   constructor(
     public signalRService: SignalRService,
     public homeService: HomeService,
+    private cd:ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
@@ -54,6 +55,7 @@ export class DashboardComponent implements OnInit {
         if (x.length > 0) {
           //有資料後把loading關閉
           this.signalRService.show = false;
+          this.cd.detectChanges()
         }
         let elecDeviceList = new Array();
         // 讓elecDataList = 訂閱收到的值

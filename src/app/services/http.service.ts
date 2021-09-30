@@ -1,3 +1,4 @@
+import { environment } from 'src/environments/environment';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http'
 import { MessageService } from './message.service'
@@ -7,7 +8,6 @@ import { catchError } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class HttpService {
-  apiUrl = 'http://192.168.140.211:5001/api'
   constructor(
     private http:HttpClient,
     private messageService:MessageService
@@ -16,7 +16,7 @@ export class HttpService {
     this.messageService.add(`HeroService: ${message}`);
   }
   get(api:string):Observable<any>{
-    return this.http.get<any>(this.apiUrl+api,{observe:'response'})
+    return this.http.get<any>(environment.baseUrl+api,{observe:'response'})
       .pipe(
         catchError(this.handleError<any>(`HttpGet [${api}] API`,[]))
       )

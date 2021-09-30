@@ -23,6 +23,7 @@ export class LayoutComponent implements OnInit {
 
   }
   Goto(){
+    this.signalRService.show=true;
     this.signalRService.RefreshDashBoardData();
     this.signalRService.GetDeviceNameList();
   }
