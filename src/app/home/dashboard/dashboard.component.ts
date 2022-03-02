@@ -18,9 +18,9 @@ import { Chart } from 'angular-highcharts';
 
 export class DashboardComponent implements OnInit {
   @ViewChild("Ac_Server") element!: ElementRef;
-  //從192.168.140.80:9100撈到的資料
+  //從樹梅派撈到的資料
   elecRowDataList: Array<ElecRowData> = [];
-  //從192.168.140.80:9210撈到的資料
+  //從樹梅派撈到的資料
   elecDataList: Array<AccumulationElec> = [];
   //控制 setInterval()生命週期
   id: any
@@ -48,10 +48,10 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     // 一開始近來顯示loading
-    // setTimeout(()=>{this.signalRService.show=true;},0);
     this.signalRService.show = true;
     this.subscription.add(
       this.signalRService.$dataNow.subscribe(x => {
+
         if (x.length > 0) {
           //有資料後把loading關閉
           this.signalRService.show = false;
@@ -62,6 +62,8 @@ export class DashboardComponent implements OnInit {
         this.elecDataList = x
         // 跑回圈 把elecDevice塞到elecDeviceList <name|value>
         this.elecDataList.forEach((x, index) => {
+
+          x.value==-1? 0:x.value;
           const elecDevice = new Array<string | number>();
           if (x.name != null)
           {
@@ -111,6 +113,8 @@ export class DashboardComponent implements OnInit {
         this.elecDataList = x;
         // 跑回圈 把elecDevice塞到elecDeviceList <name|value>
         this.elecDataList.forEach((x, index) => {
+          console.log(x)
+          x.value==-1? 0:x.value;
           const elecDevice = new Array<string | number>();
           elecDevice[0] = x.name;
           elecDevice[1] = x.value * x.volt;
